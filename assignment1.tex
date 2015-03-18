@@ -1,0 +1,52 @@
+\documentclass{scrartcl}
+\usepackage{mathtools}
+\newcommand\E{\mathbf{E}}
+\renewcommand\P{\mathbf{P}}
+\newcommand\1{\mathbf{1}}
+\begin{document}
+\section{List coloring}
+We may assume without loss of generality, that $\lvert S(v)\rvert = \lceil 10d\rceil$, since a list-coloring that uses only subsets of the lists, is also feasible for the complete lists of colors.
+
+We choose the coloring uniformly random, i.e. $f (v) \sim \operatorname{Unif}_{S(v)}$ for all $v \in V(G)$. We define the events
+\[
+A_{\{u,v\}}^c = \{f(u)=f(v)=c\}
+\]
+for any $\{u,v\}\in E(G)$ and $c \in S(u)\cap S(v)$. Then the event $\bigcap_{c, e \in E(G)} A^c_e$ is the event, that the coloring $f$ is proper. We have
+\[
+\P[A_{\{u,v\}}^c] = \P[f(u)=c] \P[f(v) = c] = \frac{1}{\lvert S(u)\rvert}\frac{1}{\lvert S(v)\rvert} \le \frac{1}{\lceil 10d\rceil^2}
+\]
+and furthermore that $A_{e_1}^{c_1}$ is independent of all $A_{e_2}^{c_2}$ for non-adjacent $e_1$, $e_2$. The rest is at most
+\[
+2(\lceil 10d\rceil d-1)
+\]
+for $\lceil 10d\rceil$ colors in each of the edges two endpoints color lists, minus 1, that is the edge just considered. 
+
+Now, we apply Lovasz' Local Lemma on the family $(A_e^c)$. This yields, since
+\[
+e(2(\lceil 10d\rceil d-1)+1)\frac{1}{\lceil 10d\rceil^2} < \frac{2ed}{\lceil 10d\rceil} \le \frac{e}{5} < 1
+\]
+that there is a proper coloring with a positive probability, hence there must exist a proper coloring.
+\section{3SAT}
+\begin{enumerate}
+\item
+Let $\Omega$ be a set, whose elements code 3SAT formulas and a set $X$, that codes truth assignments (i.e. $\{0,1\}^n$). We define the random variables $\1_{B_x} \colon \Omega \rightarrow \{0,1\}$, that is the indicator variable for the event $B_x$ that $x$ satisfies the 3SAT formula, that is argument to the function. Then $\sum_{x \in X} f_x$ is the random variable of the number of satisfying truth assignments. We note, that $\lvert X \rvert = 2^n$ and $\P[B_x] = \E[\1_{B_x}] = (\frac{7}{8})^{\lceil dn \rceil}$, where the second is due to the fast, that the choices of the clauses are independent and the probability and the probability for any truth assignment to satisfy a uniformly (in the sense specified on the sheet) sampled clause with three literals is $\frac{7}{8}$. Using this (with $\{\cdot\}$ the fractional part of a real number)
+\begin{align*}
+\E[\sum_{x \in X} \1_{B_x}]&= \sum_{x \in X} \E[\1_{B_x}] = 2^n (\frac{7}{8})^{\lceil nd \rceil} \\
+&=e^{n\ln 2 + \ln \frac{7}{8} \lceil nd \rceil}\\
+&=e^{n\ln 2 + nd  \ln \frac{7}{8}} e^{(1-\{nd\}) \ln \frac{7}{8}}\\
+&=e^{n(\ln 2 + d\ln \frac{7}{8})} \underbrace{e^{(1-\{nd\}) \ln \frac{7}{8}}}_{\in (\frac{7}{8}, 1)}
+\end{align*}
+Thus, the second term is irrelevant for asymptotics. The first part is positive and 
+\[
+\lim_{n\rightarrow \infty}e^{n(\ln 2 + d\ln \frac{7}{8})} \in (0,\infty) \Leftrightarrow \ln 2 + d\ln \frac{7}{8} = 0 \Leftrightarrow d= -\frac{\ln 2}{\ln \frac{7}{8}} =d_0 \approx 5.19089 
+\]
+So exactly for this value, the expectation is $\Theta (1)$.
+\item
+Equivalently, we can show, that the probability $\P[\lvert \sum_{x \in X} \1_{B_x}\rvert > \varepsilon] = o(n)$ for all $\varepsilon > 0$, i.e., that there is no probability that the number of satisfying assignments is greater than any $\varepsilon > 0$. Note that by the arguments in the first part of the task, if $d> d_0$, then $\E[\sum_{x \in X} \1_{B_x}] = o(n)$. Using Markov's inequality, 
+\[
+\P[\lvert \sum_{x \in X} \1_{B_x}\rvert > \varepsilon] \le \frac{\E[\sum_{x \in X}\1_{B_x}]}{\varepsilon}=o(1)
+\]
+which proves this part.
+\item
+\end{enumerate}
+\end{document}
