@@ -14,6 +14,20 @@ Homework II
 
 \section{Maximum Disjoint Paths}
 
+The dual of the given linear problem is :
+
+\paragraph{}
+\begin{tabular}{ll}
+Minimize & $\sum_{e \in E} y_e$\\
+Subject to & $\forall p \in P, \ \sum_{e \in p} y_e \geq 1$\\
+& $\forall e \in E, \  y_e \geq 0$ \\
+\end{tabular}
+\paragraph{} 
+
+Indeed, if we want an upper-bound on the value of the maximization, we have to take something that includes at least once every $x_p$, which means at least one of the edge that is contained by $p$ must be taken into account. 
+
+This duality is simply the LP version of MAXFLOW/MINCUT duality when all weights are equal to 1. A binary solution of the above dual gives a cut of the graph with a minimum number of edges.
+
 \section{Maximum Weight Spanning Tree}
 
 \section{k-Disjoint Perfect Matchings}
