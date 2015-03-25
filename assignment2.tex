@@ -18,4 +18,17 @@ Homework II
 
 \section{k-Disjoint Perfect Matchings}
 
+The integrality of the bipartite perfect matching polytope gives us a polynomial time algorithm $A$ to compute a perfect matching. Given this algorithm, and a k-regular bipartite graph $G = (A \cup B,E)$, we proceed as follow :
+
+\begin{verbatim}
+while k > 0
+    new_matching := A(G) 
+    perfect_matching_partition.add(new_matching)
+    E = E\new_matching
+    k--
+endwhile
+\end{verbatim}
+
+The correctness of this algorithm is easily verified by realising that the retrieval of edges from a perfect matching to a k-regular bipartite graph gives a (k-1)-regular bipartite graph. It also clearly runs in polynomial time.
+
 \end{document}
