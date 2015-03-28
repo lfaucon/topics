@@ -3,14 +3,62 @@
 \newcommand\E{\mathbf{E}}
 \renewcommand\P{\mathbf{P}}
 \newcommand\1{\mathbf{1}}
+\usepackage{hyperref}
+\usepackage[standard, thref]{theorem}
 \begin{document}
 Andreas Haupt, Louis Faucon
 
 Topics in Theoretical Computer Science 
 
 Homework II
-
 \section{Strong Duality Theorem}
+Throughout this task, $A \in \mathbb{R}^{m\times n}$, $b
+\begin{Lemma}[Farkas]
+$(\exists x \ge 0 \colon Ax=b) \Leftrightarrow (yA \ge 0 \Rightarrow yb \ge 0)$
+\end{Lemma}
+\begin{Proof}
+For the implication from left hand side to right hand side, let $y$ such that $sA\ge 0 , yb < 0$. Then for all $x \ge 0$ such that $Ax=b$
+\begin{align*}
+yAx &\ge 0 &yb <0
+\end{align*}
+which 
+Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$, by reordering the rows of $A$ (and the elements of $b$), that it has the form
+\begin{alignat*}
+\forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
+\forall m_1+1 \le i \le m_2 \colon &&1+a_i' x'& \le b_i\\
+\forall m_2+1 \le i \le m \colon &&-1+a_i' x'& \le b_i
+\end{alignat*}
+This system of equations is equivalent to the system
+\begin{align*}
+\forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
+\forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j& \le b_k - a_k'x'\\
+\end{align*}
+Repeating this, we may reduce the dimension of $x$ to zero. If 
+\end{Proof}
+Observe that 
+\begin{Theorem}
+We have $ \neq \emptyset $, $ \{y|y^TA = c^T \wedge y\ge 0\}$. Then
+\[
+\forall x \in \{x|Ax\le b\} \forall y \in  \{y|y^TA = c^T \wedge y\ge 0\} \colon c^Tx =y^TAx \le y^Tb,
+\]
+therefore it remains to show, that 
+\[
+\exists x \in \{x|Ax\le b\} \exists y \in  \{y|y^TA = c^T \wedge y\ge 0\} c^Tx\ge y^Tb
+\]
+It is equivalent, that
+\[
+\{(x,y) | A x \le b, A^Ty = c, -c^T + y^Tb \le 0, y \ge 0\}\neq \emptyset,
+\]
+which is, by \thref{lem:farkas}, equivalent to 
+\[
+\{(u,v,w) | u^TA - wc^T = 0 , v^TA^T + wb^T \ge 0, u^Tb+v^Tc < 0 , u \ge 0, w \ge 0\}= \emptyset.
+\]
+We suppose, this was not the case. If there was a solution of the form $(u,v,0)$
+\[
+%:
+\]
+If otherwise we had a solution of the form $(u,v,w), w >0$. Then. 
+\end{Theorem}
 
 \section{Maximum Disjoint Paths}
 
@@ -30,9 +78,13 @@ This duality is simply the LP version of MAXFLOW/MINCUT duality when all weights
 
 \section{Maximum Weight Spanning Tree}
 
+
+
+
+
 \section{k-Disjoint Perfect Matchings}
 
-The integrality of the bipartite perfect matching polytope gives us a polynomial time algorithm $A$ to compute a perfect matching. Given this algorithm, and a k-regular bipartite graph $G = (A \cup B,E)$, we proceed as follow :
+The integrality of the bipartite perfect matching polytope gives us a polynomial time algorithm $A$ to compute a perfect matching. Given this algorithm, and a $k$-regular bipartite graph $G = (A \cup B,E)$, we proceed as follow :
 
 \begin{verbatim}
 while k > 0
@@ -43,6 +95,6 @@ while k > 0
 endwhile
 \end{verbatim}
 
-The correctness of this algorithm is easily verified by realising that the retrieval of edges from a perfect matching to a k-regular bipartite graph gives a (k-1)-regular bipartite graph. It also clearly runs in polynomial time.
+The correctness of this algorithm is easily verified by realising that the retrieval of edges from a perfect matching to a $k$-regular bipartite graph gives a $(k-1)$-regular bipartite graph. It also clearly runs in polynomial time.
 
 \end{document}
