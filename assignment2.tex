@@ -4,7 +4,8 @@
 \renewcommand\P{\mathbf{P}}
 \newcommand\1{\mathbf{1}}
 \usepackage{hyperref}
-\usepackage[standard, thref]{theorem}
+\usepackage{csquotes}
+\usepackage[standard, thref]{ntheorem}
 \begin{document}
 Andreas Haupt, Louis Faucon
 
@@ -12,31 +13,28 @@ Topics in Theoretical Computer Science
 
 Homework II
 \section{Strong Duality Theorem}
-Throughout this task, $A \in \mathbb{R}^{m\times n}$, $b
+Throughout this task, Let $K$ be a ordered field, $A \in K^{m\times n}$, $b \in K^{1 \times m}$. Note that the part of the Strong Duality theorem, that unboundedness resp. infeasibility of the primal implies infeasibility resp. unboundedness of the dual and vice versa is readily proved: we do not need to prove the \enquote{vice versa} part, as this one follows from the fact, that the dual of the dual is equivalent to the original problem. If the primal 
 \begin{Lemma}[Farkas]
-$(\exists x \ge 0 \colon Ax=b) \Leftrightarrow (yA \ge 0 \Rightarrow yb \ge 0)$
+$(\exists x \ge 0 \colon Ax=b) \Leftrightarrow (K \ni u \ge 0\wedge u^TA=0 \ge 0 \Rightarrow yb \ge 0)$
 \end{Lemma}
 \begin{Proof}
-For the implication from left hand side to right hand side, let $y$ such that $sA\ge 0 , yb < 0$. Then for all $x \ge 0$ such that $Ax=b$
-\begin{align*}
-yAx &\ge 0 &yb <0
-\end{align*}
-which 
 Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$, by reordering the rows of $A$ (and the elements of $b$), that it has the form
 \begin{alignat*}
-\forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
-\forall m_1+1 \le i \le m_2 \colon &&1+a_i' x'& \le b_i\\
-\forall m_2+1 \le i \le m \colon &&-1+a_i' x'& \le b_i
+\forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i'\\
+\forall m_1+1 \le i \le m_2 \colon &&x+a_i' x'& \le b_i'\\
+\forall m_2+1 \le i \le m \colon &&-x+a_i' x'& \le b_i'
 \end{alignat*}
-This system of equations is equivalent to the system
-\begin{align*}
+where $a_i'$ is the row vector that contains the second to $n$th element of $A$'s $i$th row in the multiplied system. This system of equations is equivalent to the system
+\begin{alignat*}
 \forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
-\forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j& \le b_k - a_k'x'\\
-\end{align*}
-Repeating this, we may reduce the dimension of $x$ to zero. If 
+\forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j& \le b_k - a_k'x',
+\end{alignat*}
+. Repeating this, we may reduce the dimension of $x$ to zero. Then 
 \end{Proof}
-Observe that 
 \begin{Theorem}
+
+\end{Theorem}
+\begin{Proof}
 We have $ \neq \emptyset $, $ \{y|y^TA = c^T \wedge y\ge 0\}$. Then
 \[
 \forall x \in \{x|Ax\le b\} \forall y \in  \{y|y^TA = c^T \wedge y\ge 0\} \colon c^Tx =y^TAx \le y^Tb,
@@ -58,7 +56,7 @@ We suppose, this was not the case. If there was a solution of the form $(u,v,0)$
 %:
 \]
 If otherwise we had a solution of the form $(u,v,w), w >0$. Then. 
-\end{Theorem}
+\end{Proof}
 
 \section{Maximum Disjoint Paths}
 
