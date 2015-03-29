@@ -65,12 +65,12 @@ therefore it remains to show, that
 \exists x \in \{x|Ax\le b\} \exists y \in  \{y|y^TA = c^T \wedge y\ge 0\} \colon c^Tx\ge y^Tb
 \]
 This is equivalent to the solvability of
-\begin{align*}
-A x \le b\\
-A^Ty = c\\
--c^Tx + y^Tb \le 0 \\
-y \ge 0
-\end{align*}
+\begin{alignat*}{3}
+A x&& \le b\\
+&A^Ty &= c\\
+-c^Tx &+ y^Tb &\le 0 \\
+&y& \ge 0
+\end{alignat*}
 which is, by \autoref{lem:farkas}, equivalent to the infeasibility of
 \begin{alignat*}{2}
 u^TA - wc^T &= 0\\
@@ -113,11 +113,12 @@ Indeed, if we want an upper-bound on the value of the maximization, we have to t
 This duality is simply the LP version of MAXFLOW/MINCUT duality when all weights are equal to 1. A binary solution of the above dual gives a cut of the graph with a minimum number of edges.
 
 \section{Maximum Weight Spanning Tree}
-We consider Kruskal's algorithm, the Greedy algorithm on the matroid of Spanning trees. We want to prove the optimality of Kruskal's for not necessarily nonnegative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x$ of the tree returned by the algorithm provides a primal solution.
+We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of Kruskal's for not necessarily nonnegative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y$ such that $x,y$ satisfy complementary slackness.
 
-To show optimality, it suffices to construct a solution to the dual problem $y$ such that $x,y$ satisfy complementary slackness.
+\begin{description}
+\item[complementary slackness]
+\end{description}
 
-As performed in the lecture, we construct a dual feasible solution using the tree structure 
 
 \section{$k$-Disjoint Perfect Matchings}
 
