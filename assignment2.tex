@@ -12,8 +12,10 @@ Andreas Haupt, Louis Faucon
 Topics in Theoretical Computer Science 
 
 Homework II
-\section{Strong Duality Theorem}
-Throughout this task, Let $K$ be a ordered field, $A \in K^{m\times n}$, $b \in K^{1 \times m}$. We consider the primal and dual problem in the following form: 
+
+
+\section{Strong Duality Theorem\protect\footnote{\enquote{Kombinatorische Optimierung} by Jens Vygen and Bernhard Korte and lecture notes by Stephan Held from the University of Bonn were used.}}
+Throughout this task, Let $K \in \{\mathbb{Q}, \mathbb{R}\}$, $A \in K^{m\times n}$, $b \in K^{1 \times m}$. We consider the primal and dual problem in the following form: 
 \begin{align*}
 P &= \max_{Ax \le b} c^T x & D &= \min_{\substack{y^T A = c^T\\y \ge 0}} y^T b,
 \end{align*}
@@ -21,43 +23,37 @@ which are easily transformed into the forms considered in the lecture.
 
 We note that the part of the Strong Duality Theorem that claims that unboundedness resp. infeasibility of the primal implies infeasibility resp. unboundedness of the dual and vice versa is partly wrong and partly readily proved: 
 
-We do not need to consider the \enquote{vice versa} part, as this one can be reduced to the other case, since the dual of the dual is equivalent to the original problem. Suppose, $y$ was a dual solution and the primal was unbounded. Then $y^Tb \ge y^TAx = c^T x$ is arbitrarily big, which cannot hold for any fixed $y$. Thus the dual is infeasible. On the other hand, the infeasibility of the primal does not imply the infeasibility of the dual as the classical example
-\begin{alignat*}
- &\max 2x-y \\
-\text{such that} & x-y &\le 1 \\
-&-x+y &\le -2 \\
-&x,y &\ge 0
+We do not need to consider the \enquote{vice versa} part, as this one can be reduced to the other case, since the dual of the dual is equivalent to the original problem. Suppose, $y$ was a dual solution and the primal was unbounded. Then $y^Tb \ge y^TAx = c^T x$ is arbitrarily big, which cannot hold for any fixed $y$. Thus the dual is infeasible. On the other hand, the infeasibility of the primal does not imply the unboundedness of the dual as the classical example
+\begin{alignat*}{3}
+\max&& 2x-y \\
+\text{such that} && x-y &\le 1 \\
+&&-x+y &\le -2 \\
+&&x,y &\ge 0,
 \end{alignat*}
-with dual
-%\begin{alignat*}
-%&\max 2x-y \\
-%\text{such that} & x-y \ge 2 \\
-%&-x+y \le -1 \\
-%&x,y \ge 0
-%\end{alignat*}
-both of which are infeasible. For the proof of the second part we use the following lemma:
-\begin{Lemma}[Farkas]
+which is equivalent to its dual and infeasible, shows. For the proof of the second part we use the following lemma:
+\begin{Lemma}[Farkas]\label{lem:farkas}
 $(\exists x \colon  Ax \le b) \Leftrightarrow (K^m \ni u \ge 0\wedge u^TA=0 \ge 0 \Rightarrow u^Tb \ge 0)$
 \end{Lemma}
 \begin{Proof}
-First, we show the direction \enquote{$\Leftarrow$}. Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$, by reordering the rows of $A$ (and the elements of $b$), that it has the form
-\begin{alignat*}
+First, we show the direction \enquote{$\Leftarrow$}. Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$ and by reordering the rows of $A$ (and the elements of $b$) that it has the form
+\begin{alignat*}{3}
 \forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i'\\
 \forall m_1+1 \le i \le m_2 \colon &&x_1+a_i' x'& \le b_i'\\
-\forall m_2+1 \le i \le m \colon &&-x_1+a_i' x'& \le b_i'
+\forall m_2+1 \le i \le m \colon &&-x_1+a_i' x'& \le b_i',
 \end{alignat*}
 where $a_i'$ is the row vector that contains the second to $n$th element of $A$'s $i$th row in the multiplied system and $b_i$ is the vector of the right hand sides of the multiplied system. This system of equations is equivalent (as regards solvability) to the system
-\begin{alignat*}
+\begin{alignat*}{3}
 \forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
 \forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j'& \le b_k' - a_k'x',
 \end{alignat*}
 which follows, since inequality constraints that are not taken with equality may be omitted without changing the solvability. 
 
-Repeating this, we may reduce the dimension of $x$ to zero. We observe, that the original system $Ax \le b$ is solvable if in this final system every right hand side scalar is nonnegative. But we observe, that in the final system the coefficients on the left hand side are just nonnegative linear combinations of the coefficients in the respective row in $A$ that vanish. This can be realized by a vector $u$ as in the right hand side of our proposition. Thus, $Ax \le b$ is solvable.
+Repeating this, we may reduce the dimension of $x$ to zero. We observe, that the original system $Ax \le b$ is solvable if in this final system every right hand side scalar is nonnegative. But we observe, that in the final system the coefficients on the left hand side are just nonnegative linear combinations of the coefficients in the respective column in $A$ that vanish, i.e. $u^TA=0$ for some nonnegative vector $u$ that describes the linear combination. The right hand side of the system is then $y^Tb$, which is nonnegative by our assumption. Thus, $Ax \le b$ is solvable.
 
 For the other direction: $A x \le b$ implies $u^T A x \le u^T b$ for any $u \ge 0$, which implies $0 \le u^T b$ if in addition $u^T A = 0$. This finishes the proof.
 \end{Proof}
 \begin{Theorem}
+If $P, D \in K$, we have $P=D$.
 \end{Theorem}
 \begin{Proof}
 We have
@@ -66,34 +62,51 @@ We have
 \]
 therefore it remains to show, that 
 \[
-\exists x \in \{x|Ax\le b\} \exists y \in  \{y|y^TA = c^T \wedge y\ge 0\} c^Tx\ge y^Tb
+\exists x \in \{x|Ax\le b\} \exists y \in  \{y|y^TA = c^T \wedge y\ge 0\} \colon c^Tx\ge y^Tb
 \]
-It is equivalent, that
+This is equivalent to the solvability of
+\begin{align*}
+A x \le b\\
+A^Ty = c\\
+-c^Tx + y^Tb \le 0 \\
+y \ge 0
+\end{align*}
+which is, by \autoref{lem:farkas}, equivalent to the infeasibility of
+\begin{alignat*}{2}
+u^TA - wc^T &= 0\\
+ v^TA^T + wb^T &\ge 0\\
+u^Tb+v^Tc &< 0 \\
+ u &\ge 0\\
+ w& \ge 0
+ \end{alignat*}
+We suppose, this was not the case. If there was a solution of the form $(u,v,0)$, we would have a solution to
+\begin{align*}
+u^TA &= 0\\
+v^TA^T &\ge 0 \\
+u^T b + v^T c& <0 \\
+u, w &\ge 0
+\end{align*}
+This is equivalent by \autoref{lem:farkas} to the infeasibility of
+\begin{align*}
+Ax &\le b & A^Ty &= c &y&\ge 0
+\end{align*}
+which contradicts the feasibility of the dual.
+
+If otherwise we had a solution of the form $(u,v,w), w >0$. Then we may scale the whole system to have a solution $(u,v,1)$ and so
 \[
-\{(x,y) | A x \le b, A^Ty = c, -c^T + y^Tb \le 0, y \ge 0\}\neq \emptyset,
+0 > u^T b + v^T c \ge u^T(-Av) + v^T (A^T u) = 0
 \]
-which is, by \thref{lem:farkas}, equivalent to 
-\[
-\{(u,v,w) | u^TA - wc^T = 0 , v^TA^T + wb^T \ge 0, u^Tb+v^Tc < 0 , u \ge 0, w \ge 0\}= \emptyset.
-\]
-We suppose, this was not the case. If there was a solution of the form $(u,v,0)$
-\[
-%:
-\]
-If otherwise we had a solution of the form $(u,v,w), w >0$. Then. 
+which is a contradiction and concludes the proof.
 \end{Proof}
 
 \section{Maximum Disjoint Paths}
 
 The dual of the given linear problem is :
-
-\paragraph{}
-\begin{tabular}{ll}
-Minimize & $\sum_{e \in E} y_e$\\
-Subject to & $\forall p \in P, \ \sum_{e \in p} y_e \geq 1$\\
-& $\forall e \in E, \  y_e \geq 0$ \\
-\end{tabular}
-\paragraph{} 
+\begin{alignat*}{3}
+\min & \sum_{e \in E} y_e\\
+\text{s.t.} & \forall p \in P, \ \sum_{e \in p} y_e \geq 1\\
+& \forall e \in E, \  y_e \geq 0
+\end{alignat*}
 
 Indeed, if we want an upper-bound on the value of the maximization, we have to take something that includes at least once every $x_p$, which means at least one of the edge that is contained by $p$ must be taken into account. 
 
@@ -104,12 +117,7 @@ We consider Kruskal's algorithm, the Greedy algorithm on the matroid of Spanning
 
 To show optimality, it suffices to construct a solution to the dual problem $y$ such that $x,y$ satisfy complementary slackness.
 
-
-
-
-
-
-
+As performed in the lecture, we construct a dual feasible solution using the tree structure 
 
 \section{$k$-Disjoint Perfect Matchings}
 
