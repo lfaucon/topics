@@ -13,29 +13,54 @@ Topics in Theoretical Computer Science
 
 Homework II
 \section{Strong Duality Theorem}
-Throughout this task, Let $K$ be a ordered field, $A \in K^{m\times n}$, $b \in K^{1 \times m}$. Note that the part of the Strong Duality theorem, that unboundedness resp. infeasibility of the primal implies infeasibility resp. unboundedness of the dual and vice versa is readily proved: we do not need to prove the \enquote{vice versa} part, as this one follows from the fact, that the dual of the dual is equivalent to the original problem. If the primal 
+Throughout this task, Let $K$ be a ordered field, $A \in K^{m\times n}$, $b \in K^{1 \times m}$. We consider the primal and dual problem in the following form: 
+\begin{align*}
+P &= \max_{Ax \le b} c^T x & D &= \min_{\substack{y^T A = c^T\\y \ge 0}} y^T b,
+\end{align*}
+which are easily transformed into the forms considered in the lecture.
+
+We note that the part of the Strong Duality Theorem that claims that unboundedness resp. infeasibility of the primal implies infeasibility resp. unboundedness of the dual and vice versa is partly wrong and partly readily proved: 
+
+We do not need to consider the \enquote{vice versa} part, as this one can be reduced to the other case, since the dual of the dual is equivalent to the original problem. Suppose, $y$ was a dual solution and the primal was unbounded. Then $y^Tb \ge y^TAx = c^T x$ is arbitrarily big, which cannot hold for any fixed $y$. Thus the dual is infeasible. On the other hand, the infeasibility of the primal does not imply the infeasibility of the dual as the classical example
+\begin{alignat*}
+ &\max 2x-y \\
+\text{such that} & x-y &\le 1 \\
+&-x+y &\le -2 \\
+&x,y &\ge 0
+\end{alignat*}
+with dual
+%\begin{alignat*}
+%&\max 2x-y \\
+%\text{such that} & x-y \ge 2 \\
+%&-x+y \le -1 \\
+%&x,y \ge 0
+%\end{alignat*}
+both of which are infeasible. For the proof of the second part we use the following lemma:
 \begin{Lemma}[Farkas]
-$(\exists x \ge 0 \colon Ax=b) \Leftrightarrow (K \ni u \ge 0\wedge u^TA=0 \ge 0 \Rightarrow yb \ge 0)$
+$(\exists x \colon  Ax \le b) \Leftrightarrow (K^m \ni u \ge 0\wedge u^TA=0 \ge 0 \Rightarrow u^Tb \ge 0)$
 \end{Lemma}
 \begin{Proof}
-Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$, by reordering the rows of $A$ (and the elements of $b$), that it has the form
+First, we show the direction \enquote{$\Leftarrow$}. Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$, by reordering the rows of $A$ (and the elements of $b$), that it has the form
 \begin{alignat*}
 \forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i'\\
-\forall m_1+1 \le i \le m_2 \colon &&x+a_i' x'& \le b_i'\\
-\forall m_2+1 \le i \le m \colon &&-x+a_i' x'& \le b_i'
+\forall m_1+1 \le i \le m_2 \colon &&x_1+a_i' x'& \le b_i'\\
+\forall m_2+1 \le i \le m \colon &&-x_1+a_i' x'& \le b_i'
 \end{alignat*}
-where $a_i'$ is the row vector that contains the second to $n$th element of $A$'s $i$th row in the multiplied system. This system of equations is equivalent to the system
+where $a_i'$ is the row vector that contains the second to $n$th element of $A$'s $i$th row in the multiplied system and $b_i$ is the vector of the right hand sides of the multiplied system. This system of equations is equivalent (as regards solvability) to the system
 \begin{alignat*}
 \forall 1 \le i \le m_1 \colon &&a_i' x'& \le b_i\\
-\forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j& \le b_k - a_k'x',
+\forall m_1+1 \le j \le m_2 \forall m_2+1 \le k\le m \colon &&a_j' x'-b_j'& \le b_k' - a_k'x',
 \end{alignat*}
-. Repeating this, we may reduce the dimension of $x$ to zero. Then 
+which follows, since inequality constraints that are not taken with equality may be omitted without changing the solvability. 
+
+Repeating this, we may reduce the dimension of $x$ to zero. We observe, that the original system $Ax \le b$ is solvable if in this final system every right hand side scalar is nonnegative. But we observe, that in the final system the coefficients on the left hand side are just nonnegative linear combinations of the coefficients in the respective row in $A$ that vanish. This can be realized by a vector $u$ as in the right hand side of our proposition. Thus, $Ax \le b$ is solvable.
+
+For the other direction: $A x \le b$ implies $u^T A x \le u^T b$ for any $u \ge 0$, which implies $0 \le u^T b$ if in addition $u^T A = 0$. This finishes the proof.
 \end{Proof}
 \begin{Theorem}
-
 \end{Theorem}
 \begin{Proof}
-We have $ \neq \emptyset $, $ \{y|y^TA = c^T \wedge y\ge 0\}$. Then
+We have
 \[
 \forall x \in \{x|Ax\le b\} \forall y \in  \{y|y^TA = c^T \wedge y\ge 0\} \colon c^Tx =y^TAx \le y^Tb,
 \]
@@ -75,14 +100,20 @@ Indeed, if we want an upper-bound on the value of the maximization, we have to t
 This duality is simply the LP version of MAXFLOW/MINCUT duality when all weights are equal to 1. A binary solution of the above dual gives a cut of the graph with a minimum number of edges.
 
 \section{Maximum Weight Spanning Tree}
+We consider Kruskal's algorithm, the Greedy algorithm on the matroid of Spanning trees. We want to prove the optimality of Kruskal's for not necessarily nonnegative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x$ of the tree returned by the algorithm provides a primal solution.
+
+To show optimality, it suffices to construct a solution to the dual problem $y$ such that $x,y$ satisfy complementary slackness.
 
 
 
 
 
-\section{k-Disjoint Perfect Matchings}
 
-The integrality of the bipartite perfect matching polytope gives us a polynomial time algorithm $A$ to compute a perfect matching. Given this algorithm, and a $k$-regular bipartite graph $G = (A \cup B,E)$, we proceed as follow :
+
+
+\section{$k$-Disjoint Perfect Matchings}
+
+The integrality of the bipartite perfect matching polytope gives us a polynomial time algorithm $A$ to compute a perfect matching. Given this algorithm, and a $k$-regular bipartite graph $G = (A \cup B,E)$, we proceed as follows :
 
 \begin{verbatim}
 while k > 0
