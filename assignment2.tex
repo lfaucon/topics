@@ -115,7 +115,9 @@ A binary solution of the above dual selects a minimum number of edges such that 
 \section{Maximum Weight Spanning Tree}
 We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of Kruskal's for not necessarily non-negative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x^*$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y^*$ such that $x^*,y^*$ satisfy complementary slackness.
 
-We consider the naturally induced tree structure $T_K$ from the order of the selected edges ${e_1,e_2,...,e_{n-1}}$. And we build $y^*$ just as in class, with $y^*_S = w(e_i) - w(parent(e_i))$ if $S=V(e_i)$ and $y^*_V = w(e_{n-1})$. We see that this 
+We consider the naturally induced tree structure $T_K$ from the order of the selected edges ${e_1,e_2,...,e_{n-1}}$. And we build $y^*$ just as in class, with $y^*_S = w(e_i) - w(parent(e_i))$ if $S=V(e_i)$ and $y^*_V = w(e_{n-1})$. We see that this $y^*_V$ can be either positive or negative. This is due to the fact that the equality in the primal can be interpreted as two opposite inequalities and thus results in a $y^*_{V1}$ and a $y^*_{V2}$. Our $y^*_V$ is just the difference of these two and so can be negative. However whatever its value, the condition for complementarity slackness will always be true.
+
+Everything else works as in the course algorithm.
 
 \section{$k$-Disjoint Perfect Matchings}
 
