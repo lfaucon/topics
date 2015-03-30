@@ -113,12 +113,9 @@ Indeed, if we want an upper-bound on the value of the maximization, we have to t
 A binary solution of the above dual selects a minimum number of edges such that any path in P has at least one edge that is selected. This results in a cut because no path exists without using one of the selected edge. The dual is thus an LP version of MINCUT problem.
 
 \section{Maximum Weight Spanning Tree}
-We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of Kruskal's for not necessarily nonnegative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y$ such that $x,y$ satisfy complementary slackness.
+We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of Kruskal's for not necessarily non-negative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x^*$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y^*$ such that $x^*,y^*$ satisfy complementary slackness.
 
-\begin{description}
-\item[complementary slackness]
-\end{description}
-
+We consider the naturally induced tree structure $T_K$ from the order of the selected edges ${e_1,e_2,...,e_{n-1}}$. And we build $y^*$ just as in class, with $y^*_S = w(e_i) - w(parent(e_i))$ if $S=V(e_i)$ and $y^*_V = w(e_{n-1})$. We see that this 
 
 \section{$k$-Disjoint Perfect Matchings}
 
