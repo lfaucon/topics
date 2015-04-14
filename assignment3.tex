@@ -14,9 +14,32 @@ Topics in Theoretical Computer Science
 Homework III
 
 
-\section{Matroids intersection}
+\section{Matroid Intersection}
+To see that for this problem an efficient (i.e. polynomial) algorithm exists, we note, 
+\begin{itemize}
+\item that by the matroid intersection theorem the maximum cardinality set that is independent in two matroids at the same can be found efficiently. 
+\item that the problem is equivalent to 
+\[
+\max_{S \in \mathcal{I}_1\cap \mathcal{I}_2} \lvert S\rvert =\frac{1}{2} \sum_{v \in V(G)}( i(v) + o(v)),\footnote{This is a double counting argument.}
+\]
+where the ground set for the partition matroids $\mathcal{I}_1$ and $\mathcal{I}_2$ is $E(G)$ and
+\begin{align*}
+\mathcal{I}_1& \coloneqq \{ A \subseteq E(G) | \forall v \in V(G) \colon \delta_A^- (v) \le i(n)\}\\
+\mathcal{I}_2& \coloneqq \{ A \subseteq E(G) | \forall v \in V(G) \colon \delta_A^+ (v) \le o(n)\}.
+\end{align*}
+\end{itemize}
 \section{Matroids}
-\section{Spanning Trees}
+We first prove heredity. Let $A \subseteq B$. If $B$ is good, let $M_B$ be a matching that matches $B$. Then $M_B \cap \delta_G (A)$ matches $A$.
 
+Second, we have to prove the exchange property. Let $V$, $W$, $\lvert W\rvert > \lvert V\rvert$  be good and let $M_V$ resp. $M_W$ be matchings that match them. For the undirected graph $G'= (\Gamma_G (A \cup B), M_V \cup M_W)$ consider its orientation $G''$ where all edges of $M_V$ resp. $M_W$ leave $A$ and enter $B$ resp. leave $B$ and enter $A$.
+
+$G''$ has in- and out-degrees one or two, thus the graph consists of paths and circles. Since $\lvert M_W \rvert = \lvert W \rvert > \lvert V \rvert= \lvert M_V\rvert$, there is a path $P$ that begins in $v \in W\setminus V$\footnote{Since $G$ and so also $G''$ is bipartite, there are only even circles that are $M_V$-$M_W$-alternating by the choice of orientation. Deleting the circles, we remain with a union of $M_V$-$M_W$-alternating paths, which contain altogether more edges of $M_W$ than of $M_W$. Thus one path begins and ends in $M_V$, by the orientation beginning in $e \in W\setminus V$.}. But $M_V \Delta E(P)$ matches all vertices in $P$ and $e$. Thus $P \cup \{e\}$ is good.
+\section{Spanning Trees}
+\begin{enumerate}
+\item
+
+\item
+
+\end{enumerate}
 
 \end{document}

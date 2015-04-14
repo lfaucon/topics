@@ -32,7 +32,7 @@ We do not need to consider the \enquote{vice versa} part, as this one can be red
 \end{alignat*}
 which is equivalent to its dual and infeasible, shows. For the proof of the second part we use the following lemma:
 \begin{Lemma}[Farkas]\label{lem:farkas}
-$(\exists x \colon  Ax \le b) \Leftrightarrow (K^m \ni u \ge 0\wedge u^TA=0 \ge 0 \Rightarrow u^Tb \ge 0)$
+$(\exists x \colon  Ax \le b) \Leftrightarrow (\forall u\in K^m (u\ge 0, u^TA=0)\colon u^Tb \ge 0)$
 \end{Lemma}
 \begin{Proof}
 First, we show the direction \enquote{$\Leftarrow$}. Let $Ax \le b$ be given. By multiplication of $A$ and $b$ with positive constants, we may assume, that the elements in $A$'s first column are $0$ or $\pm 1$ and by reordering the rows of $A$ (and the elements of $b$) that it has the form
@@ -100,24 +100,22 @@ which is a contradiction and concludes the proof.
 \end{Proof}
 
 \section{Maximum Disjoint Paths}
-
-The dual of the given linear problem is :
+The dual of the given linear problem is
 \begin{alignat*}{3}
 \min & \sum_{e \in E} y_e\\
 \text{s.t.} & \forall p \in P, \ \sum_{e \in p} y_e \geq 1\\
-& \forall e \in E, \  y_e \geq 0
+& \forall e \in E, \  y_e \geq 0.
 \end{alignat*}
+Indeed, if we want an upper bound on the value of the maximization, we have to take something that includes at least once every $x_p$ on every path, which means at least one of the edge that is contained by $p$ must be taken into account. 
 
-Indeed, if we want an upper-bound on the value of the maximization, we have to take something that includes at least once every $x_p$, which means at least one of the edge that is contained by $p$ must be taken into account. 
-
-A binary solution of the above dual selects a minimum number of edges such that any path in P has at least one edge that is selected. This results in a cut because no path exists without using one of the selected edge. The dual is thus an LP version of MINCUT problem.
+A binary solution of the above dual selects a minimum number of edges such that any path in $P$ contains at least one edge that is selected. This results in a cut because no path exists without using one of the selected edge. The dual is thus an LP version of MINCUT.
 
 \section{Maximum Weight Spanning Tree}
-We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of Kruskal's for not necessarily non-negative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x^*$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y^*$ such that $x^*,y^*$ satisfy complementary slackness.
+We consider Kruskal's algorithm, the maximizing greedy algorithm on the graphical matroid. We want to prove the optimality of the algorithm for not necessarily non-negative edge weights using the LP on the exercise sheet. Obviously, the incidence vector $x^*$ of the tree returned by the algorithm provides a primal solution. To show optimality, it suffices to construct a solution to the dual problem $y^*$ such that $x^*,y^*$ satisfy complementary slackness.
 
 We consider the naturally induced tree structure $T_K$ from the order of the selected edges ${e_1,e_2,...,e_{n-1}}$. And we build $y^*$ just as in class, with $y^*_S = w(e_i) - w(parent(e_i))$ if $S=V(e_i)$ and $y^*_V = w(e_{n-1})$. We see that this $y^*_V$ can be either positive or negative. This is due to the fact that the equality in the primal can be interpreted as two opposite inequalities and thus results in a $y^*_{V1}$ and a $y^*_{V2}$. Our $y^*_V$ is just the difference of these two and so can be negative. However whatever its value, the condition for complementarity slackness will always be true.
 
-Everything else works as in the course algorithm.
+Everything else works as in the analysis made in class.
 
 \section{$k$-Disjoint Perfect Matchings}
 
@@ -132,6 +130,6 @@ while k > 0
 endwhile
 \end{verbatim}
 
-The correctness of this algorithm is easily verified by realizing that the retrieval of edges from a perfect matching to a $k$-regular bipartite graph gives a $(k-1)$-regular bipartite graph. It also clearly runs in polynomial time.
+The correctness of this algorithm is easily verified by realizing that the deletion of edges that form a perfect matching from a $k$-regular bipartite graph gives a $(k-1)$-regular bipartite graph. It also clearly runs in polynomial time (by the integrality of the matching polytope)
 
 \end{document}
