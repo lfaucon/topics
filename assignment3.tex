@@ -37,9 +37,37 @@ $G''$ has in- and out-degrees one or two, thus the graph consists of paths and c
 \section{Spanning Trees}
 \begin{enumerate}
 \item
+We note, that there is a mistake in the task: The weights must be assumed to be positive, since otherwise the weight function is a counterexample for the first inequality.
 
+It was shown in the lecture, that the spanning tree polytope is integral. Therefore, it suffices to show, that there is a fractional solution $(x_e)_{e \in E(G)}$ for the spanning tree polytope, for that we have
+\[
+\sum_{e \in E} x_e w(e) < \frac{2}{k} \sum_{e \in E} w(e)
+\]
+for the integrality will yield an integral solution with at most as much weight. 
+
+To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
+\[
+x_e = \begin{cases} \frac{2}{k} & e \in S \\ 0 &\text{else.}\end{cases}
+\]
+Then:
+\[
+\sum_{e \in E(G)} x_e w(e) = \frac{2}{k}\sum_{e \in E(G) \setminus S} w(e) <  \frac{2}{k}\sum_{e \in E(G)} w(e)
+\]
+and by $k$-regularity and $k$-connectedness
+\begin{align*}
+\sum_{e \in E} x_e &= \frac{2}{k}\sum_{e \in E(G) \setminus S} 1 =\frac{2}{k}( \lvert E(G) \rvert - \frac{k}{2}) = \lvert V(G) \rvert -1\\
+\sum_{e \in \delta (S)} x_e &\ge \frac{2}{k} (k-\frac{k}{2}) = 1
+\end{align*}
+The positivity is obvious.
 \item
-
+We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the partition matroid whose independent edge sets are those, for whom the degrees of all vertices is restricted to two. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some feasible solution of this polytope with\footnote{we take the weight vector in a maximization over this polytope to be constantly one}
+\[
+\sum_{e \in E(G)} x_e  \ge 
+\]
+since for an integral solution of the polytope
+\[
+\sum_{e \in E(G)} x_e = \frac{1}{2} \sum_{v \in V(G)} x(\delta(v)) = 1 \lvert\{v \in V| \lvert\delta (v)\rvert=2\}\rvert + \frac{1}{2} \lvert\{v \in V| \lvert\delta (v)\rvert=1\}\rvert
+\]
 \end{enumerate}
 
 \end{document}
