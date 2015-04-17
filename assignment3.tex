@@ -43,7 +43,7 @@ It was shown in the lecture, that the spanning tree polytope is integral. Theref
 \[
 \sum_{e \in E} x_e w(e) < \frac{2}{k} \sum_{e \in E} w(e)
 \]
-for the integrality will yield an integral solution with at most as much weight. 
+for the integrality will yield an integral solution with at most as much weight.
 
 To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
 \[
@@ -60,14 +60,14 @@ and by $k$-regularity and $k$-connectedness
 \end{align*}
 The positivity is obvious.
 \item
-We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the partition matroid whose independent edge sets are those, for whom the degrees of all vertices is restricted to two. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some feasible solution of this polytope with\footnote{we take the weight vector in a maximization over this polytope to be constantly one}
+We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the partition matroid whose independent edge sets are those, for whom the degrees of all vertices is restricted to two. The corresponding polytope is as a matroid intersection polytope integral. Therefore, it suffices to show, that there is some feasible solution of this polytope with
 \[
-\sum_{e \in E(G)} x_e  \ge 
+\sum_{e \in E(G)} x_e = \frac{1}{2}\sum_{v \in V(G)} x(\delta(v)) \ge \frac{1}{k} + \frac{k-1}{2k}  = \frac{1+k}{2k}
 \]
 since for an integral solution of the polytope
-\[
-\sum_{e \in E(G)} x_e = \frac{1}{2} \sum_{v \in V(G)} x(\delta(v)) = 1 \lvert\{v \in V| \lvert\delta (v)\rvert=2\}\rvert + \frac{1}{2} \lvert\{v \in V| \lvert\delta (v)\rvert=1\}\rvert
-\]
+\begin{multline*}
+\sum_{e \in E(G)} x_e = \frac{1}{2} \sum_{v \in V(G)} x(\delta(v))\\ = \lvert\{v \in V| \lvert\delta (v)\rvert=2\}\rvert + \frac{1}{2} \lvert\{v \in V| \lvert\delta (v)\rvert=1\}\rvert
+\end{multline*}
 \end{enumerate}
 
 \end{document}
