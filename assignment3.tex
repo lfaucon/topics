@@ -37,8 +37,6 @@ $G''$ has in- and out-degrees one or two, thus the graph consists of paths and c
 \section{Spanning Trees}
 \begin{enumerate}
 \item
-We note, that there is a mistake in the task: The weights must be assumed to be positive, since otherwise the weight function is a counterexample for the first inequality.
-
 It was shown in the lecture, that the spanning tree polytope is integral. Therefore, it suffices to show, that there is a fractional solution $(x_e)_{e \in E(G)}$ for the spanning tree polytope, for that we have
 \[
 \sum_{e \in E} x_e w(e) < \frac{2}{k} \sum_{e \in E} w(e)
@@ -47,18 +45,27 @@ for the integrality will yield an integral solution with at most as much weight.
 
 To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
 \[
-x_e = \begin{cases} \frac{2}{k} & e \in S \\ 0 &\text{else.}\end{cases}
+x_e = \begin{cases} \frac{2}{k} & e \notin S \\ 0 &\text{otherwise.}\end{cases}
 \]
-Then:
+Then, we must verify :
 \[
-\sum_{e \in E(G)} x_e w(e) = \frac{2}{k}\sum_{e \in E(G) \setminus S} w(e) <  \frac{2}{k}\sum_{e \in E(G)} w(e)
+\forall T \subseteq E, x(T) \leq r(T)
 \]
-and by $k$-regularity and $k$-connectedness
+
+For any $T\subseteq E$, we call $N$ the number of component of the sub-graph $(T,V)$.
+
+If $N > 1$,
 \begin{align*}
-\sum_{e \in E} x_e &= \frac{2}{k}\sum_{e \in E(G) \setminus S} 1 =\frac{2}{k}( \lvert E(G) \rvert - \frac{k}{2}) = \lvert V(G) \rvert -1\\
-\sum_{e \in \delta (S)} x_e &\ge \frac{2}{k} (k-\frac{k}{2}) = 1
+x(T) &\leq (|E| - \frac{k}{2} \times N ) \times\frac{2}{k} \\
+&\leq |V| - N \\
+&\leq r(T) \\
 \end{align*}
-The positivity is obvious.
+Because due to k-correctedness each component has a least k out edges.
+
+And if N = 1
+\[
+x(T) \leq x(E) = |E| - \frac{k}{2} ) \times \frac{2}{k} = |V| - 1
+\]
 \item
 We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the partition matroid whose independent edge sets are those, for whom the degrees of all vertices is restricted to two. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some feasible solution of this polytope with\footnote{we take the weight vector in a maximization over this polytope to be constantly one}
 \[
