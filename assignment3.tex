@@ -31,7 +31,7 @@ where the ground set for the partition matroids $\mathcal{I}_1$ and $\mathcal{I}
 \section{Matroids}
 We first prove heredity. Let $A \subseteq B$. If $B$ is good, let $M_B$ be a matching that matches $B$. Then $M_B \cap \delta_G (A)$ matches $A$.
 
-Second, we have to prove the exchange property. Let $V$, $W$, $\lvert W\rvert > \lvert V\rvert$  be good and let $M_V$ resp. $M_W$ be matchings that match them. For the undirected graph $G'= (\Gamma_G (A \cup B), M_V \cup M_W)$ consider its orientation $G''$ where all edges of $M_V$ resp. $M_W$ leave $A$ and enter $B$ resp. leave $B$ and enter $A$.
+Second, we have to prove the exchange property. Let $V$, $W$, $\lvert W\rvert > \lvert V\rvert$  be good and let $M_V$ resp. $M_W$ be matchings that match them. For the undirected graph $G'= (A \cup B \cup \Gamma_G (A \cup B), M_V \cup M_W)$ consider its orientation $G''$ where all edges of $M_V$ resp. $M_W$ leave $A$ and enter $B$ resp. leave $B$ and enter $A$.
 
 $G''$ has in- and out-degrees one or two, thus the graph consists of paths and circles. Since $\lvert M_W \rvert = \lvert W \rvert > \lvert V \rvert= \lvert M_V\rvert$, there is a path $P$ that begins in $v \in W\setminus V$\footnote{Since $G$ and so also $G''$ is bipartite, there are only even circles that are $M_V$-$M_W$-alternating by the choice of orientation. Deleting the circles, we remain with a union of $M_V$-$M_W$-alternating paths, which contain altogether more edges of $M_W$ than of $M_W$. Thus one path begins and ends in $M_V$, by the orientation beginning in $e \in W\setminus V$.}. But $M_V \Delta E(P)$ matches all vertices in $P$ and $e$. Thus $P \cup \{e\}$ is good.
 \section{Spanning Trees}
@@ -43,53 +43,49 @@ It was shown in the lecture, that the spanning tree polytope is integral. Theref
 \]
 for the integrality will yield an integral solution with at most as much weight.
 
-To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
+To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{\label{footnote}The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
 \[
 x_e = \begin{cases} \frac{2}{k} & e \notin S \\ 0 &\text{otherwise.}\end{cases}
 \]
-Then, we must verify :
+We are left to prove that this is a feasible point in the ST polytope. The nonnegativity is obvious. Furthermore,
 \[
-\forall T \subseteq E, x(T) \leq r(T)
+\sum_{e \in E} x_e =\left( \frac{k\lvert V \rvert}{2} - \frac{2}{k}\right)\frac{2}{k}=\lvert V \rvert - 1
 \]
-
-For any $T\subseteq E$, we call $N$ the number of component of the sub-graph $(T,V)$.
-
-If $N > 1$,
-\begin{align*}
-x(T) &\leq (|E| - \frac{k}{2} \times N ) \times\frac{2}{k} \\
-&\leq |V| - N \\
-&\leq r(T) \\
-\end{align*}
-Because due to k-correctedness each component has a least k out edges.
-
-And if N = 1,
+since $\frac{k\lvert V \rvert}{2} = \lvert E \rvert$ by $k$-regularity and we give all edges except for $\frac{2}{k}$ an $x$-value of $\frac{2}{k}$.
 \[
-x(T) \leq x(E) = (|E| - \frac{k}{2}) \times \frac{2}{k} = |V| - 1
+\sum_{e \in \delta(S)} x_e \ge \left (k-\frac{k}{2}\right) \frac{2}{k} = 1
 \]
+as by $k$-connectedness there are at least $k$ elements in $\delta (S)$, of which are at most $\frac{k}{2}$ in $S$ (as $\lvert S \rvert = \frac{k}{2}$). This shows feasibility of $x$ and completes the proof.
 \item
-Since the graph is k-regular, we can find at least $P = \frac{|V|}{k+1}$ vertices that are not neighbors (we just need to take one at random, remove its neighbors and keep going). For each of these we call $E_p \forall 1 \leq p \leq P$ its set of k edges. We then consider the partition matroid that takes at most two edges in each $E_p$ and at most $|V| - 1 - 2 \times P$ in the remaining edges $E_0 = E-\bigcup E_p$ which has cardinality of $|E| - P \times k > (|V| - 1) \times \frac{k}{2}$.
+We remark, that this assumption is not true for the unique $1$-connected and $1$-regular graph. This one has only one spanning tree consisting of one edge, but there can be no edge with degree two in a spanning tree. Therefore, we assume $k>1$.
 
-We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the matroid described above. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some fractional feasible solution of this polytope. For this we take the exact same fractional solution than for the first question except for the arbitrary set S that we now take from inside $E_0$.
+Since the graph is $k$-regular, there is a stable set of size $P \ge \frac{|V|}{k+1}$ (Repeatedly, take a vertex at random and remove its neighbors). For each of these we call $E_p$, $1 \leq p \leq P$ its set of $k$ edges. We then consider the partition matroid that takes at most two edges in each $E_p$ and at most $|V| - 1 - 2 P$ in the remaining edges $E_0 = E-\bigcup_{1\le p \le P} E_p$ which has cardinality of $\lvert E\rvert - Pk > (\lvert V\rvert - 1)\frac{k}{2}$.
 
-We must verify for the second matroid rank function :
+We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the matroid described above. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some fractional feasible solution of this polytope with $x(E) = \lvert V \rvert-1$.\footnote{Then a maximization over the size of an independent set with respect to both matrices will yield an integral solution, that is circle-free and connected, as it has then $\lvert V \rvert-1$ edges. Furthermore, it will take in the partition matroid all inequalities with equality, as $\lvert \bigcup_{0\le p \le P} E_p \rvert = \lvert V\rvert-1$, thus, in this spanning tree all $P$ edges in the stable set will have degree $2$, as wanted} For this we take the exact same fractional solution as for the first question except that $S$ is not an arbitrary set of size $\frac{k}{2}$ (see \autoref{footnote}), but restricted to be a subset of $E_0$. This point is obviously nonnegative. We have to show $x(T) \le r_i(T)$, $i=1, 2$, where $r_i$ is the matroid rank function of $\mathcal{I}_i$. 
+\begin{description}
+\item[graphic matroid]
+Let $T\subseteq E$ and $N$ be the number of connected components of the subgraph $(V,T)$. If $N > 1$,
 \[
-\forall T \subseteq E, x(T) \leq r(T)
+x(T) \leq \left(\lvert E\rvert - \frac{k}{2} N\right)\frac{2}{k} \leq \lvert V\rvert - N = r_1(T)
 \]
-
-Indeed, for any $T\subseteq E$ : 
-
-We easily get for $1 \leq p \leq P$
+as $k$-correctedness implies that each component has a least $k$ out-edges. If $N= 1$,
+\[
+x(T) \leq x(E) = \left(\lvert E\rvert - \frac{k}{2}\right) \frac{2}{k} = |V| - 1
+\]
+\item[partition matroid]
+Let $T\subseteq E$. We easily get for $1 \leq p \leq P$
 \[ 
-x(T\cap E_p) = |T\cap E_p| \times \frac{2}{k} \leq r(T\cap E_p)
+x(T\cap E_p) = \lvert T\cap E_p\rvert \frac{2}{k} \leq r_2(T\cap E_p)
 \]
-and,
-\begin{align*}
-when |T\cap E_0| < |V| - 1 - 2 \times P :&\\
-x(T\cap E_0) & \leq |T\cap E_0| \times \frac{2}{k} \leq r(T\cap E_0)\\
-when |T\cap E_0| = |V| - 1 - 2 \times P :&\\
-x(T\cap E_0) & \leq x(E_0) \leq (|E_0| - |S|) \times \frac{2}{k} = |V| - 1 - 2 \times P\\
-\end{align*}
-
+and, if $\lvert T\cap E_0\rvert \le \lvert V\rvert - 1 - 2 P$,
+\[
+x(T\cap E_0)  \leq \lvert T\cap E_0\rvert \frac{2}{k} \leq \lvert T \cap E_0\rvert = r_2(T\cap E_0), 
+\]
+whereas if $\lvert T\cap E_0\rvert > \lvert V\rvert - 1 - 2 P$
+\[
+x(T\cap E_0)  \leq x(E_0) \leq (\lvert E_0\rvert - \lvert S\rvert)  \frac{2}{k} = \lvert V\rvert - 1 - 2  P = r_2(T \cap E_0)
+\]
+\end{description}
 \end{enumerate}
 
 \end{document}
