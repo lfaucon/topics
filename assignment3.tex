@@ -62,19 +62,36 @@ x(T) &\leq (|E| - \frac{k}{2} \times N ) \times\frac{2}{k} \\
 \end{align*}
 Because due to k-correctedness each component has a least k out edges.
 
-And if N = 1
+And if N = 1,
 \[
-x(T) \leq x(E) = |E| - \frac{k}{2} ) \times \frac{2}{k} = |V| - 1
+x(T) \leq x(E) = (|E| - \frac{k}{2}) \times \frac{2}{k} = |V| - 1
 \]
 \item
-We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the partition matroid whose independent edge sets are those, for whom the degrees of all vertices is restricted to two. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some feasible solution of this polytope with\footnote{we take the weight vector in a maximization over this polytope to be constantly one}
+Since the graph is k-regular, we can find at least $P = \frac{|V|}{k+1}$ vertices that are not neighbors (we just need to take one at random, remove its neighbors and keep going). For each of these we call $E_p \forall 1 \leq p \leq P$ its set of k edges. We then consider the partition matroid that takes at most two edges in each $E_p$ and at most $|V| - 1 - 2 \times P$ in the remaining edges $E_0 = E-\bigcup E_p$ which has cardinality of $|E| - P \times k > (|V| - 1) \times \frac{k}{2}$.
+
+We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the matroid described above. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some fractional feasible solution of this polytope. For this we take the exact same fractional solution than for the first question except for the arbitrary set S that we now take from inside $E_0$.
+
+We must verify for the second matroid rank function :
 \[
-\sum_{e \in E(G)} x_e  \ge 
+\forall T \subseteq E, x(T) \leq r(T)
 \]
-since for an integral solution of the polytope
-\[
-\sum_{e \in E(G)} x_e = \frac{1}{2} \sum_{v \in V(G)} x(\delta(v)) = 1 \lvert\{v \in V| \lvert\delta (v)\rvert=2\}\rvert + \frac{1}{2} \lvert\{v \in V| \lvert\delta (v)\rvert=1\}\rvert
+
+Indeed, for any $T\subseteq E$ : 
+
+We easily get for $1 \leq p \leq P$
+\[ 
+x(T\cap E_p) = |T\cap E_p| \times \frac{2}{k} \leq r(T\cap E_p)
 \]
+and,
+\begin{align*}
+when |T\cap E_0| < |V| - 1 - 2 \times P :&\\
+x(T\cap E_0) & \leq |T\cap E_0| \times \frac{2}{k} \leq r(T\cap E_0)\\
+when |T\cap E_0| = |V| - 1 - 2 \times P :&\\
+x(T\cap E_0) & \leq x(E_0) \leq (|E_0| - |S|) \times \frac{2}{k} = |V| - 1 - 2 \times P\\
+\end{align*}
+
+
+
 \end{enumerate}
 
 \end{document}
