@@ -17,7 +17,7 @@ Homework III
 \section{Matroid Intersection}
 To see that for this problem an efficient (i.e. polynomial) algorithm exists, we note, 
 \begin{itemize}
-\item that by the matroid intersection theorem the maximum cardinality set that is independent in two matroids at the same can be found efficiently. 
+\item that by the matroid intersection theorem the maximum cardinality set that is independent in two matroids at the same time can be found efficiently. 
 \item that the problem is equivalent to 
 \[
 \max_{S \in \mathcal{I}_1\cap \mathcal{I}_2} \lvert S\rvert =\frac{1}{2} \sum_{v \in V(G)}( i(v) + o(v)),\footnote{This is a double counting argument.}
@@ -43,23 +43,23 @@ It was shown in the lecture, that the spanning tree polytope is integral. Theref
 \]
 for the integrality will yield an integral solution with at most as much weight.
 
-To obtain this solution, we choose an arbitrary edge set in the graph of size $\frac{k}{2}$.\footnote{\label{footnote}The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
+To obtain this solution, we choose an arbitrary edge set $S$ in the graph of size $\frac{k}{2}$.\footnote{\label{footnote}The following equation only works for the case, that $k\in 2\mathbb{N}$. Otherwise, we choose still a set of $\frac{k}{2}$ edges, and choose from this set an edge $e$ and set $x_e = \frac{1}{k}$ (letting the rest stay the same). The calculations go through the same way with this modification, as one notices.}
 \[
 x_e = \begin{cases} \frac{2}{k} & e \notin S \\ 0 &\text{otherwise.}\end{cases}
 \]
+
 We are left to prove that this is a feasible point in the ST polytope. The nonnegativity is obvious. Furthermore,
 \[
-\sum_{e \in E} x_e =\left( \frac{k\lvert V \rvert}{2} - \frac{2}{k}\right)\frac{2}{k}=\lvert V \rvert - 1
+\sum_{e \in E} x_e =\left( \frac{k\lvert V \rvert}{2} - \frac{k}{2}\right)\frac{2}{k}=\lvert V \rvert - 1
 \]
 since $\frac{k\lvert V \rvert}{2} = \lvert E \rvert$ by $k$-regularity and we give all edges except for $\frac{2}{k}$ an $x$-value of $\frac{2}{k}$.
 \[
-\sum_{e \in \delta(S)} x_e \ge \left (k-\frac{k}{2}\right) \frac{2}{k} = 1
+\sum_{e \in \delta(A)} x_e \ge \left (k-\frac{k}{2}\right) \frac{2}{k} = 1
 \]
-as by $k$-connectedness there are at least $k$ elements in $\delta (S)$, of which are at most $\frac{k}{2}$ in $S$ (as $\lvert S \rvert = \frac{k}{2}$). This shows feasibility of $x$ and completes the proof.
+for any $A \subseteq E$, as by $k$-connectedness there are at least $k$ elements in $\delta (A)$, of which are at most $\frac{k}{2}$ in $A$ (as $\lvert S \rvert = \frac{k}{2}$). This shows feasibility of $x$ and completes the proof.
 \item
 We remark, that this assumption is not true for the unique $1$-connected and $1$-regular graph. This one has only one spanning tree consisting of one edge, but there can be no edge with degree two in a spanning tree. Therefore, we assume $k>1$.
-
-Since the graph is $k$-regular, there is a stable set of size $P \ge \frac{|V|}{k+1}$ (Repeatedly, take a vertex at random and remove its neighbors). For each of these we call $E_p$, $1 \leq p \leq P$ its set of $k$ edges. We then consider the partition matroid that takes at most two edges in each $E_p$ and at most $|V| - 1 - 2 P$ in the remaining edges $E_0 = E-\bigcup_{1\le p \le P} E_p$ which has cardinality of $\lvert E\rvert - Pk > (\lvert V\rvert - 1)\frac{k}{2}$.
+Since the graph is $k$-regular, there is a stable set of size $P \ge \frac{|V|}{k+1}$ (Repeatedly, take a vertex at random and remove its neighbors). For each of these we call $E_p$, $1 \leq p \leq P$ its set of $k$ edges. We then consider the partition matroid that takes at most two edges in each $E_p$ and at most $|V| - 1 - 2 P$ in the remaining edges $E_0 = E-\bigcup_{1\le p \le P} E_p$ which has cardinality of $\lvert E\rvert - Pk$.
 
 We consider the matroid intersection $(E(G), \mathcal{I}_1\cap \mathcal{I}_2)$ with $\mathcal{I}_1$ the graphic matroid and $\mathcal{I}_2$ the matroid described above. The corresponding matroid intersection polytope is integral. Therefore, it suffices to show, that there is some fractional feasible solution of this polytope with $x(E) = \lvert V \rvert-1$.\footnote{Then a maximization over the size of an independent set with respect to both matrices will yield an integral solution, that is circle-free and connected, as it has then $\lvert V \rvert-1$ edges. Furthermore, it will take in the partition matroid all inequalities with equality, as $\lvert \bigcup_{0\le p \le P} E_p \rvert = \lvert V\rvert-1$, thus, in this spanning tree all $P$ edges in the stable set will have degree $2$, as wanted} For this we take the exact same fractional solution as for the first question except that $S$ is not an arbitrary set of size $\frac{k}{2}$ (see \autoref{footnote}), but restricted to be a subset of $E_0$. This point is obviously nonnegative. We have to show $x(T) \le r_i(T)$, $i=1, 2$, where $r_i$ is the matroid rank function of $\mathcal{I}_i$. 
 \begin{description}
