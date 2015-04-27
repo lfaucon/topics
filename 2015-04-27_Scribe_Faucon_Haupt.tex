@@ -1,0 +1,182 @@
+\documentclass[10pt]{article}
+\usepackage[OT4]{fontenc}
+\newtheorem{define}{Definition}
+\usepackage{mathtools}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\transpose}{T}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\conv}{\operatorname{conv}}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{hyperref}
+
+\oddsidemargin=0.15in
+\evensidemargin=0.15in
+\topmargin=-.5in
+\textheight=9in
+\textwidth=6.25in
+
+\begin{document}
+\input{preamble.tex}
+\lecture{11}{April 27, 2015}{Ola Svensson}{Louis Faucon, Andreas Haupt}
+
+\section{Introduction}
+In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{kamarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
+
+\subsection{Motivation}
+Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we caught it. The question to ask is
+\begin{itemize}
+\item How big is Sahara?
+\item When to terminate, i.e. How small is the smallest lion?
+\end{itemize}
+The corresponding idea for the problem 
+\subsection{Problem Statement}
+The problem we wish to solve is the following:
+
+%:
+Feasibility Problem
+Solve: Given a bounded convex set $P\subseteq \R^n$
+Find: $x \in P$ or decide, that $P = \emptyset$.
+%:
+
+\section{The Ellipsoid Algorithm}
+The following routine solves the Feasibility Problem:
+\begin{enumerate}
+\item Start with an Ellipsoid $E_0 \supseteq P$. 
+\item While the center of $a_k$ of $E_k$ is not in $P$ select $c \in \R^n$, such that
+\[
+\{x \in \R^n | c^\transpose x < c^\transpose a_k \} \supseteq P
+\]
+i.e. pick a hyperplane that \emph{separates} $P$.
+
+and pick $E_{k+1}$ the smallest possible ellipsoid, such that
+\[
+E_{k+1} \supseteq E_k \cap \{x \in \R^n | c^\transpose x < c^\transpose a_k \}
+\]
+\end{enumerate}
+
+\subsection{Ellipsoids}
+Recall that $A \in \R^{n \times n}$ is called positive definite, if it is symmetric, i.e. $A = A^\transpose$ and 
+\[
+\forall x \in \R^n\setminus \{0\} \colon x^\transpose A x > 0
+\]
+i.e. that the scalar product induced by $A$ is positive definite. This class of matrices is closed under inversion and for any positive definite matrix $A$ there exists a matrix $A^{\frac{1}{2}}$, such that
+\[
+A = A^{\frac{1}{2}} (A^{\frac{1}{2}})^\transpose
+\]
+\begin{definition}[Ellipsoid]
+An ellipsoid $E(a,A)$ with center $a \in \R^n$ and positive definite matrix $A$ is defined as
+\[
+E(a,A) \coloneqq \{x \in \R^n | (x-a)^{\transpose} A^{-1} (x-a) \le 1 \} = \{x \in \R^n | \| (A^{-1})^\frac{1}{2} (x-a) \| \le 1 \}
+\]
+\end{definition}
+In fact, $E(a,A)$ is just the image of the unit ball $\{x\in \R^n | \|x\|\le 1\}$ under the affine-linear map $x \mapsto A^{\frac{1}{2}} x + a$. As an example, consider $E(a,A)$ with 
+\begin{align}
+A^{\frac{1}{2}} &= \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} & a &= \begin{pmatrix} 4 \\ 0 \end{pmatrix}. \label{eq:ellipsoidexample}
+\end{align}
+The result is \autoref{fig:ellipsoidexample}.
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=2]
+\begin{scope}    \draw[->] (-1.1,0) -- (6.1,0) node[right] {$x$} coordinate(x axis);    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);    \foreach \x/\xtext in {-1,0,...,6}      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};  \end{scope}
+\draw (0,0) circle (1cm);
+\draw (4,0) ellipse (2cm and 1cm);
+\path (.4,1) edge [bend left, ->] node[above]{$x \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} +  \begin{pmatrix} 4 \\ 0 \end{pmatrix}$} (3.4,1);
+\end{tikzpicture}
+\caption{On the left the unit ball in $\R^2$, the affine map mapping the unit circle to the ellipsoid from \protect\autoref{eq:ellipsoidexample}.}
+\label{fig:ellipsoidexample}
+\end{figure}
+\begin{lemma}[Half-Ball Lemma]\label{lem:halfball}
+The half-ball 
+\[
+H = \{x \in \R^n | \| x \| \le 1, x \ge 0 \}
+\]
+where $x \ge 0$ means $x_i \ge 0, \forall 1 \le i \le n$ is contained in the ellipsoid
+\[
+E = \left\{ x \in \R^n \middle| \left(\frac{n+1}{n}\right)^2\left(x_1 - \frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 \le 1 \right\}
+\]
+\end{lemma}
+\begin{proof}
+If $\sum_{i=2}^n x_i^2 \le 1, x \ge 0$, then the lemma is true. One calculates
+\begin{align*}
+\left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 &= \left(\frac{n+1}{n} \right)^2 \left(x_1^2-2\frac{1}{n+1}x_1 + \frac{1}{(n+1)^2}\right) + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2\\
+&= \frac{(n+1)^2}{n^2} x_1^2-\frac{2(n+1)}{n^2}x_1 + \frac{1}{n^2} + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2\\
+&=%:
+\end{align*}
+\end{proof}
+We remark, that this ellipsoid is $E(a,A)$ with
+\begin{align*}
+a &= \frac{1}{n+1} e_1 &  A^{\frac{1}{2}}&= \diag \left(\frac{n}{n+1}, \frac{n}{\sqrt{n^2-1}}, \dots, \frac{n}{\sqrt{n^2-1}}\right),
+\end{align*}
+where $e_1$ is the first canonical basis vector and $\diag (x_1, \dots, x_n)$ denotes the matrix with $x_1, \dots, x_n$ on its diagonal. In dimension two, this ellipsoid is given by \autoref{fig:halfball}.
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=2]
+\begin{scope}    \draw[->] (-1.6,0) -- (1.6,0) node[right] {$x$} coordinate(x axis);    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);    \foreach \x/\xtext in {-1,0,...,1}      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};  \end{scope}
+\draw (1,0) arc (0:180:1cm);
+\draw (0,0.33333) ellipse (1.15 and 0.6666);
+\end{tikzpicture}
+\caption{The ellipsoid $E$ from \protect\autoref{fig:halfball}}
+\label{fig:halfball}
+\end{figure}
+What is the volume of our ellipsoid? For sure, $a$ does not matter for the volume. The change of volume is thus given by
+\[
+\det (A^{\frac{1}{2}}) = \frac{n}{n+1}\prod_{i=2}^n \frac{n}{\sqrt{n^2-1}} \le e^{-\frac{1}{2(n+1)}}
+\]
+\begin{corollary}
+If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding ellipsoid from \autoref{lem:halfball}, then
+\[
+\frac{\vol (E)}{\vol (E_n)} = \det (A^{\frac{1}{2}}) = \frac{n}{n+1} \left(\frac{n^2}{n^2-1}\right)^{\frac{n}{2}-\frac{1}{2}} \le e^{-\frac{1}{n+1} + \frac{n-1}{2} \frac{1}{n^2-1}} = e^{-\frac{1}{n+1} + \frac{1}{2(n+1)}} \le e^{-\frac{1}{2(n+1)}}<1
+\]
+\end{corollary}
+Now, we may consider more generally $E = (-\frac{d}{d+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$, where $I$ denotes the identity matrix. But now $E_k = (a_k, A)$ and some hyperplane goes through $a_k$.  Let us check what happens if we apply $T^{-1} (x) = (A^{-1})^{\frac{1}{2}} (x-a)$ to $E_k$:
+\begin{itemize}
+\item It transforms $E_k$ into the unit ball. 
+\item $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | c^\transpose A^{\frac{1}{2}} y \le 0 \}$
+\end{itemize}
+
+\section{Stopping Criterion, Minimal Size of Polytopes and choice of separation hyperplane for binary problems}
+We now discuss three remaining questions:
+\begin{enumerate}
+\item What is the minimal volume of a non-empty polytope?
+\item How to select $E_0$?
+\item How to find the separation $c$?
+\end{enumerate}
+In the following three subsections, we target these questions.
+\subsection{Minimum Size of a polytope}
+We are interested in the case, when $P = \conv (S), S \subseteq \{0,1\}^n$. We assume, that $P$ is full-dimensional. What is our starting ellipsoid? We may take $a = (\frac{1}{2}, \dots, \frac{1}{2})$, with radius $\sqrt{n}$, which has volume smaller than $\sqrt{n}^{n} 2^n$, which means $\log (\vol (E_0)) = O(n \log n)$. 
+\subsection{Stopping Criterion}
+We can quit, when 
+\begin{align*}
+\vol (E_k) &< \vol(P) \\
+\vol (E_k) &\le e^{-\frac{k}{2(n+1)}} \vol (E_0)
+\end{align*}
+This yields, that at most $O(\log (\vol (E_0))$%:
+iterations.
+
+Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in P$, such that the convex hull of this point set is a simplex. It has volume
+\[
+\frac{1}{n!} \left\lvert\det ((v_0-v_1, \dots, v_0-v_n))\right\rvert
+\]
+Therefore, $\vol (P) \ge \frac{1}{n!}$.
+
+\section{Separation Oracles}
+The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle:
+
+%: 
+Separation Problem
+Given $x^* \in P$
+Decide whether $x^*\in P$ and if not output $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$.
+%
+
+\subsection{Separation Oracle for Travelling Salesperson Problem}
+The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit in an undirected weighted graph $G$. For $x_e \in \{0,1\}^{E(G)}$ we let $x_e$ be the incidence vector of a tour. A popular LP relaxation for this problem is
+\begin{alignat}{3}
+\min &\sum_{e \in E(G)} d(e) x_e&&\nonumber \\
+&\sum_{e \in \delta (v)} x_e &=2 & \forall v \in V(G) \label{eq:cutinequalities}\\
+&\sum_{e \in \delta(S)} x_e \ge 2 & \forall S \subseteq V\nonumber\\
+& x &\ge 0\nonumber
+\end{alignat}
+This LP can be solved efficiently using the Ellipsoid method. The inequalities \autoref{eq:cutinequalities} can be efficiently separated by calculating the minimum $s$-$t$-cut for all $s,t \in V$. 
+\end{document}
