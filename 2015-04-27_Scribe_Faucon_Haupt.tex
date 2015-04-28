@@ -37,9 +37,13 @@ Now we make the transfer to the problem we intend to solve:
 \subsection{Problem Statement}
 We would like to find, given a convex set $P\subseteq \R^n$, an $x \in P$ or decide, that $P = \emptyset$.
 
-If we can solve this problem efficiently, we can also solve an arbitrary LP efficiently, using the following: We consider the primal-dual LP, i.e. the LP that contains all the inequalities and equalities of the dual and the primal LP. Suppose, there are $k$ inequalities. At first, we test, whether the primal-dual LP is feasible, if not, there is no optimal solution to the LP by the duality theorem. Otherwise, we test, whether the LP becomes infeasible if we substitute for one of the inequalities itself with equality. If this makes the LP infeasible, that means, no feasible solution of the primal-dual takes the substituted inequality with equality, hence it is redundant and can be deleted. If the LP remains feasible that way, we make the substitution having now an LP with less inequalities. Iteratively, we obtain a maximization subject to a number of equality constraints. This can be solved with Gaussian Elimination. In the next section, we describe the Ellipsoid Method and related geometric propositions.
+If we can solve this problem efficiently, we can also solve an arbitrary LP efficiently, using the following: We consider the primal-dual polytope, i.e. the LP that contains all the inequalities and equalities of the dual and the primal LP and the equality of values. This means for the LP $\max_{Ax\le b} c^\transpose x$ the polytope
+\[
+\{x \in \R^n |Ax \le b, yA=c, y \ge 0, yb=cx\}.
+\]
+Suppose, there are $k$ inequalities. At first, we test, whether the primal-dual polytope is feasible; if not, there is no optimal solution to the LP by the duality theorem. Otherwise, we test, whether the LP becomes infeasible if we substitute for one of the inequalities equality. If this makes the LP infeasible, that means, no feasible solution of the primal-dual takes the substituted inequality with equality, hence it is redundant and can be deleted. If the LP remains feasible that way, we make the substitution having now an LP with less inequalities. Iteratively, we obtain a maximization subject to a number of equality constraints. This can be solved with Gaussian Elimination and yields an optimal solution in a polynomial number of feasibility oracle calls and polynomial time. In the next section, we describe the Ellipsoid Method that solves the feasibility problem and present related geometric propositions.
 \section{The Ellipsoid Algorithm}
-The following routine solves the Feasibility Problem:
+The Feasibility Problem is solved by \autoref{algo:ellips} if this algorithm terminates. Its idea is to 
 \begin{algorithm}
 \caption[a]{Ellipsoid Method}
 \KwIn{Convex Set $P$, $\varepsilon > 0$ such that $\vol (P) \ge \varepsilon$}
@@ -49,7 +53,26 @@ Start with an Ellipsoid $E_0 \supseteq P$\;
 Let $E_{k+1}$ be the smallest ellipsoid, such that $E_{k+1} \supseteq E_k \cap \{x \in \R^n | c^\transpose x < c^\transpose a_k\}$\;
 $k \leftarrow k+1$\;}
 \eIf{center of $E_k$ in $P$}{\Return Yes\;}{\Return No\;}
+\label{algo:ellips}
 \end{algorithm}
+\autoref{fig:ellipsoidex}
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}
+    \begin{scope}[scale=0.6]
+      \draw[fill=gray!20!white] (0,0) -- (1,1) -- (2,1) -- (2,-1) -- (0,0);
+      \node at (1.2,0.2) {$P$};
+    \end{scope}
+    \draw[dashed] (2.5,0) ellipse (3cm and 3cm);
+    \draw[dotted] (2.5, 0) circle (0.05);
+    \draw[] (2.5, -3.5) -- (2.5, 3.5);
+    \draw[dashed] (2.5, 0) edge[->] (2, 0);
+    \draw[] (1.7, 0) ellipse (2.2cm and 3.2cm);
+    \draw[] (1.7, 0) circle (0.05);
+  \end{tikzpicture}
+  \caption{One step of the Ellipsoid method: Starting with the dashed ellipsoid we obtain the smaller ellipsoid (using a separating hyperplane).}
+  \label{fig:ellipsoidex}
+\end{figure}
 We review some properties of ellipsoids.
 \subsection{Ellipsoids}
 Recall that $A \in \R^{n \times n}$ is called positive definite, iff it is symmetric, i.e. $A = A^\transpose$ and 
