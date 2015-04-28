@@ -8,6 +8,7 @@
 \newcommand{\vol}{\operatorname{vol}}
 \newcommand{\conv}{\operatorname{conv}}
 \usepackage{tikz}
+\usepackage{algorithm2e}
 \usetikzlibrary{calc}
 \usepackage{hyperref}
 \usepackage[style=alphabetic, backend=biber]{biblatex}
@@ -24,46 +25,39 @@
 \lecture{11}{April 27, 2015}{Ola Svensson}{Louis Faucon, Andreas Haupt}
 
 \section{Introduction}
-In today's lecture, the \emph{Ellipsoid Method} is introduced, which has been the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice as experiments show. A major advantage of the Ellipsoid method is that it can solve even exponentially-sized LPs for which an efficient so-called separation oracle exists. This is the case i.e. for the Traveling Salesperson problem, as we show in \autoref{subsec:seporacle}. Another widely used solution method for LPs, the \emph{Interior Point Method} introduced by \cite{karmarkar89}, will not be covered here, as it does not have this advantage, although it is proved efficient in theory and practice, but which will not be covered here. 
-
-\subsection{Motivation}
-Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we catch it. Questions arise :
+In today's lecture, the \emph{Ellipsoid Method} is introduced, which has been the first weakly polynomial-time\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} algorithm for Linear Programming. The method was originally proposed in \cite{shor77} in the more general context of convex optimization problems. \cite{khachiyan79} applied this to Linear Programming. The method is fast in theory, but very slow in practice as experiments show. A major advantage of the Ellipsoid method is that it can solve even exponentially-sized LPs for which an efficient so-called separation oracle exists. This is the case i.e. for the Traveling Salesperson problem, as we see in \autoref{subsec:seporacle}. Another widely used solution method for LPs, the \emph{Interior Point Method} introduced by \cite{karmarkar89}, will not be covered here, as it does not have this advantage, although it is proved efficient in theory and seems to be competitive in practice. 
+\subsection{Motivation}\label{sec:motivation}
+Suppose\footnote{This motivation is due to \protect\cite{lovaszschrijver}}, you are lion hunter in Sahara and there is at least one lion in it. If you have plenty of time, you could catch one lion by building a fence that splits Sahara into two pieces, to look on which side of the fence the lion is, building a fence that splits this part of Sahara in two parts, etc. When the area of the piece of Sahara we know the lion is in is smaller than any lion can be, we have caught it. The success of this strategy and the time needed to catch the lion depend on the following:
 \begin{itemize}
 \item How big is Sahara?
-\item When to terminate, i.e. How small is the smallest lion?
+\item When to terminate, i.e.: How small is the smallest lion?
 \end{itemize}
-
+Now we make the transfer to the problem we intend to solve:
 \subsection{Problem Statement}
-The problem we wish to solve is the following:
+We would like to find, given a convex set $P\subseteq \R^n$, an $x \in P$ or decide, that $P = \emptyset$.
 
-Given a bounded convex set $P\subseteq \R^n$, find: $x \in P$ or decide, that $P = \emptyset$.
-
-This problem seems to solve only feasibility, but since we can add the cost function as as one of the limiting inequalities the algorithm remains very useful for optimization.
-
+If we can solve this problem efficiently, we can also solve an arbitrary LP efficiently, using the following: We consider the primal-dual LP, i.e. the LP that contains all the inequalities and equalities of the dual and the primal LP. Suppose, there are $k$ inequalities. At first, we test, whether the primal-dual LP is feasible, if not, there is no optimal solution to the LP by the duality theorem. Otherwise, we test, whether the LP becomes infeasible if we substitute for one of the inequalities itself with equality. If this makes the LP infeasible, that means, no feasible solution of the primal-dual takes the substituted inequality with equality, hence it is redundant and can be deleted. If the LP remains feasible that way, we make the substitution having now an LP with less inequalities. Iteratively, we obtain a maximization subject to a number of equality constraints. This can be solved with Gaussian Elimination. In the next section, we describe the Ellipsoid Method and related geometric propositions.
 \section{The Ellipsoid Algorithm}
 The following routine solves the Feasibility Problem:
-\begin{enumerate}
-\item Start with an Ellipsoid $E_0 \supseteq P$. 
-\item While the center of $a_k$ of $E_k$ is not in $P$ select $c \in \R^n$, such that
-\[
-\{x \in \R^n | c^\transpose x < c^\transpose a_k \} \supseteq P
-\]
-i.e. pick a hyperplane that \emph{separates} $P$.
-
-and pick $E_{k+1}$ the smallest possible ellipsoid, such that
-\[
-E_{k+1} \supseteq E_k \cap \{x \in \R^n | c^\transpose x < c^\transpose a_k \}
-\]
-\end{enumerate}
-
+\begin{algorithm}
+\caption[a]{Ellipsoid Method}
+\KwIn{Convex Set $P$, $\varepsilon > 0$}
+\KwOut{Answer whether there is a }
+Start with an Ellipsoid $E_0 \supseteq P$\;
+\While{center of $a_k$ of $E_k$ not in $P$ or $\vol (E_k) < \varepsilon$}{Let $c \in \R^n$, such that $\{x \in \R^n | c^\transpose x < c^\transpose a_k \} \supseteq P$ i.e. pick a hyperplane that \emph{separates} $P$\;
+Let $E_{k+1}$ be the smallest ellipsoid, such that $E_{k+1} \supseteq E_k \cap \{x \in \R^n | c^\transpose x < c^\transpose a_k\}$\;
+$k \leftarrow k+1$\;}
+\IfElse{center of $E_k$ in $P$}{\Return Yes\;}{\Return No\;
+\end{algorithm}
+We review some properties of ellipsoids.
 \subsection{Ellipsoids}
-Recall that $A \in \R^{n \times n}$ is called positive definite, if it is symmetric, i.e. $A = A^\transpose$ and 
+Recall that $A \in \R^{n \times n}$ is called positive definite, iff it is symmetric, i.e. $A = A^\transpose$ and 
 \[
 \forall x \in \R^n\setminus \{0\} \colon x^\transpose A x > 0
 \]
 i.e. that the scalar product induced by $A$ is positive definite. This class of matrices is closed under inversion and for any positive definite matrix $A$ there exists a matrix $A^{\frac{1}{2}}$, such that
 \[
-A = A^{\frac{1}{2}} (A^{\frac{1}{2}})^\transpose
+A = A^{\frac{1}{2}} (A^{\frac{1}{2}})^\transpose.
 \]
 \begin{definition}[Ellipsoid]
 An ellipsoid $E(a,A)$ with center $a \in \R^n$ and positive definite matrix $A$ is defined as
@@ -75,7 +69,7 @@ In fact, $E(a,A)$ is just the image of the unit ball $\{x\in \R^n | \|x\|\le 1\}
 \begin{align}
 A^{\frac{1}{2}} &= \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} & a &= \begin{pmatrix} 4 \\ 0 \end{pmatrix}. \label{eq:ellipsoidexample}
 \end{align}
-The result is \autoref{fig:ellipsoidexample}.
+The result is \autoref{fig:ellipsoidexample}. We now would like to come closer 
 \begin{figure}
 \centering
 \begin{tikzpicture}[scale=2]
@@ -110,11 +104,10 @@ Let $x$ be in the half-ball, we have $\sum_{i=1}^n x_i^2 \le 1, x_1 \ge 0$, then
 \left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 
 &\leq \left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2}(1 - x_1^2)\\
 &\leq \frac{2(n+1)}{n^2} x_1^2-\frac{2(n+1)}{n^2}x_1 + 1\\
-&\leq 1 \text{ because } 0 \leq x_1 \leq 1
+&\leq 1 
 \end{align*}
+as  $0 \leq x_1 \leq 1$
 \end{proof}
-
-
 We remark, that this ellipsoid is $E(a,A)$ with
 \begin{align*}
 a &= \frac{1}{n+1} e_1 &  A^{\frac{1}{2}}&= \diag \left(\frac{n}{n+1}, \frac{n}{\sqrt{n^2-1}}, \dots, \frac{n}{\sqrt{n^2-1}}\right),
@@ -137,11 +130,10 @@ where $e_1$ is the first canonical basis vector and $\diag (x_1, \dots, x_n)$ de
 \caption{The smallest ellipsoid containing the half-ball in dimension two}
 \label{fig:halfball}
 \end{figure}
-What is the volume of our ellipsoid? For sure, $a$ does not matter for the volume. The change of volume is thus given by $\det (A^{\frac{1}{2}})$ and we have
+What is the volume of our ellipsoid? For sure, the translation by $a$ does not matter for the volume. The change of volume is thus given by $\det (A^{\frac{1}{2}})$ and we have
 \[
 \det (A^{\frac{1}{2}}) = \frac{n}{n+1} (\frac{n}{\sqrt{n^2-1}})^{n-1} \le e^{-\frac{1}{n+1}} (e^{\frac{1}{n^2-1}})^{\frac{n-1}{2}} = e^{-\frac{1}{2(n+1)}}
 \]
-
 using $e^x \geq 1 + x$.
 \begin{corollary}
 If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding ellipsoid from Lemma \ref{lem:halfball}, then
@@ -149,39 +141,30 @@ If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding elli
 \frac{\vol (E)}{\vol (E_n)} = \det (A^{\frac{1}{2}}) \le e^{-\frac{1}{2(n+1)}}<1
 \]
 \end{corollary}
-More generally, we may consider the half-ball in any direction $d$. Then the ellipsoid becomes $E = (-\frac{d}{n+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$, where $I$ denotes the identity matrix. Now, given $E_k = (a_k, A_k)$ and some hyperplane which goes through $a_k$, we can apply the inverse transformation $T^{-1} (x) = (A^{-1})^{\frac{1}{2}} (x-a)$ :
+More generally, we may consider the half-ball in any direction $d$. Then the ellipsoid becomes $E = (-\frac{d}{n+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$ and $I$ denotes the identity matrix. Now, given $E_k = (a_k, A_k)$ and some hyperplane which goes through $a_k$, we can apply the inverse transformation $x \mapsto (A^{-1})^{\frac{1}{2}} (x-a)$ of the transformation that mapped the unit ball to our polytope. One observes, that
 \begin{itemize}
 \item $E_k$ becomes the unit ball. 
 \item The hyperplane now cuts the unit ball in half-balls $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | (c^\transpose A^{\frac{1}{2}}) y \le 0 \}$
 \end{itemize}
 Finally applying again the transformation to the ellipsoid given by Lemma \ref{lem:halfball} gives us the desired ellipsoid.
 
-
-\section{Stopping Criterion, Minimal Size of Polytopes and choice of separation hyperplane for binary problems}
-We now discuss three remaining questions:
-\begin{enumerate}
-\item What is the minimal volume of a non-empty polytope?
-\item How to select $E_0$?
-\item How to find the separation $c$?
-\end{enumerate}
-In the following two subsections, we target the first two questions and the third is dealt with in section \ref{sec:oracles}.
-\subsection{Minimum Size of a polytope}
-We are interested in the case, when $P = \conv (S), S \subseteq \{0,1\}^n$. We assume, that $P$ is full-dimensional. What is our starting ellipsoid? We may take $a = (\frac{1}{2}, \dots, \frac{1}{2})$, with radius $\sqrt{n}$, which has volume smaller than $\sqrt{n}^{n} 2^n$, which means $\log (\vol (E_0)) = O(n \log n)$. 
+The next section is concerned with further technical aspects of the Ellipsoid Method.
+\section{Initial Ellipsoid, Stopping and Minimal Polytope Size}
+We now discuss three remaining questions for the special case of 0-1 LPs i.e. LPs whose polytope $P$ is of the form $P = \conv (S), S \subseteq \{0,1\}^n$. We furthermore assume them to be full-dimensional. For the initial ellipsoid, $E_0 \coloneqq E(a,\sqrt{n}E_n)$, $a=(\frac{1}{2}, \dots, \frac{1}{2})$ is an obvious choice. The minimum size of a polytope and a stopping criterion are discussed in the subsections below.
+\subsection{Minimum Size of a Polytope}
+Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in P$, whose convex hull forms a simplex. It has volume
+\[
+\frac{1}{n!} \left\lvert\det ((v_0-v_1, \dots, v_0-v_n))\right\rvert
+\]
+Therefore, $\vol (P) \ge \frac{1}{n!}$.
 \subsection{Stopping Criterion}
-We can quit, when 
+We observe, that the initial ellipsoid has a volume of at most $\sqrt{n}^{n} 2^n$, which means that $\log (\vol (E_0)) = O(n \log n)$. We can stop the algorithm if $\vol (E_k) &< \vol(P)$
 \begin{align*}
 \vol (E_k) &< \vol(P) \\
 \vol (E_k) &\le e^{-\frac{k}{2(n+1)}} \vol (E_0)
 \end{align*}
 This yields, that at most $O(n \log (\frac{\vol (E_0)}{\vol (P)}))$%:
 iterations.
-
-Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in P$, such that the convex hall of this point set is a simplex. It has volume
-\[
-\frac{1}{n!} \left\lvert\det ((v_0-v_1, \dots, v_0-v_n))\right\rvert
-\]
-Therefore, $\vol (P) \ge \frac{1}{n!}$, which means we have a polynomial number of iterations.
-
 \section{Separation Oracles}
 \label{sec:oracles}
 The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle.
