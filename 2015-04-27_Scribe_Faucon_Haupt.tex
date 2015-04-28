@@ -164,7 +164,7 @@ We now discuss three remaining questions:
 \item How to select $E_0$?
 \item How to find the separation $c$?
 \end{enumerate}
-In the following three subsections, we target these questions.
+In the following two subsections, we target the first two questions and the third is dealt with in section \ref{sec:oracles}.
 \subsection{Minimum Size of a polytope}
 We are interested in the case, when $P = \conv (S), S \subseteq \{0,1\}^n$. We assume, that $P$ is full-dimensional. What is our starting ellipsoid? We may take $a = (\frac{1}{2}, \dots, \frac{1}{2})$, with radius $\sqrt{n}$, which has volume smaller than $\sqrt{n}^{n} 2^n$, which means $\log (\vol (E_0)) = O(n \log n)$. 
 \subsection{Stopping Criterion}
@@ -173,23 +173,24 @@ We can quit, when
 \vol (E_k) &< \vol(P) \\
 \vol (E_k) &\le e^{-\frac{k}{2(n+1)}} \vol (E_0)
 \end{align*}
-This yields, that at most $O(\log (\vol (E_0))$%:
+This yields, that at most $O(n \log (\frac{\vol (E_0)}{\vol (P)}))$%:
 iterations.
 
-Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in P$, such that the convex hull of this point set is a simplex. It has volume
+Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in P$, such that the convex hall of this point set is a simplex. It has volume
 \[
 \frac{1}{n!} \left\lvert\det ((v_0-v_1, \dots, v_0-v_n))\right\rvert
 \]
-Therefore, $\vol (P) \ge \frac{1}{n!}$.
+Therefore, $\vol (P) \ge \frac{1}{n!}$, which means we have a polynomial number of iterations.
 
 \section{Separation Oracles}
-The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle:
+\label{sec:oracles}
+The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle.
 
-%: 
-Separation Problem
-Given $x^* \in P$
-Decide whether $x^*\in P$ and if not output $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$.
-%
+Separation Oracle : 
+Given a point $x^*$,
+decide whether $x^*\in P$ and if not output $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$.
+
+
 
 \subsection{Separation Oracle for Travelling Salesperson Problem}\label{subsec:seporacle}
 The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit in an undirected weighted graph $G$. For $x_e \in \{0,1\}^{E(G)}$ we let $x_e$ be the incidence vector of a tour. A popular LP relaxation for this problem is
