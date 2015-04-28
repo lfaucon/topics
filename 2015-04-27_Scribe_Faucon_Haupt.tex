@@ -1,5 +1,6 @@
 \documentclass[10pt]{article}
 \usepackage[OT1]{fontenc}
+\usepackage[utf8]{inputenc}
 \newtheorem{define}{Definition}
 \usepackage{mathtools}
 \newcommand{\R}{\mathbf{R}}
@@ -41,13 +42,13 @@ If we can solve this problem efficiently, we can also solve an arbitrary LP effi
 The following routine solves the Feasibility Problem:
 \begin{algorithm}
 \caption[a]{Ellipsoid Method}
-\KwIn{Convex Set $P$, $\varepsilon > 0$}
-\KwOut{Answer whether there is a }
+\KwIn{Convex Set $P$, $\varepsilon > 0$ such that $\vol (P) \ge \varepsilon$}
+\KwOut{Feasibility of $P$}
 Start with an Ellipsoid $E_0 \supseteq P$\;
 \While{center of $a_k$ of $E_k$ not in $P$ or $\vol (E_k) < \varepsilon$}{Let $c \in \R^n$, such that $\{x \in \R^n | c^\transpose x < c^\transpose a_k \} \supseteq P$ i.e. pick a hyperplane that \emph{separates} $P$\;
 Let $E_{k+1}$ be the smallest ellipsoid, such that $E_{k+1} \supseteq E_k \cap \{x \in \R^n | c^\transpose x < c^\transpose a_k\}$\;
 $k \leftarrow k+1$\;}
-\IfElse{center of $E_k$ in $P$}{\Return Yes\;}{\Return No\;
+\eIf{center of $E_k$ in $P$}{\Return Yes\;}{\Return No\;}
 \end{algorithm}
 We review some properties of ellipsoids.
 \subsection{Ellipsoids}
@@ -156,34 +157,24 @@ Let $v_0 \in P$. Since $P$ is full-dimensional, there exist $v_1, \dots, v_n \in
 \[
 \frac{1}{n!} \left\lvert\det ((v_0-v_1, \dots, v_0-v_n))\right\rvert
 \]
-Therefore, $\vol (P) \ge \frac{1}{n!}$.
+Therefore, $\vol (P) \ge \frac{1}{n!}$ (as all entries in the vectors are integral).
 \subsection{Stopping Criterion}
-We observe, that the initial ellipsoid has a volume of at most $\sqrt{n}^{n} 2^n$, which means that $\log (\vol (E_0)) = O(n \log n)$. We can stop the algorithm if $\vol (E_k) &< \vol(P)$
-\begin{align*}
-\vol (E_k) &< \vol(P) \\
-\vol (E_k) &\le e^{-\frac{k}{2(n+1)}} \vol (E_0)
-\end{align*}
-This yields, that at most $O(n \log (\frac{\vol (E_0)}{\vol (P)}))$%:
-iterations.
-\section{Separation Oracles}
-\label{sec:oracles}
-The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle.
-
-Separation Oracle : 
-Given a point $x^*$,
-decide whether $x^*\in P$ and if not output $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$.
-
-
-
+We observe, that the initial ellipsoid has a volume of at most $\sqrt{n}^{n} 2^n$, which means that $\log (\vol (E_0)) = O(n \log n)$. We can stop the algorithm if $\vol (E_k) < \vol(P)$. Furthermore, we have
+\[
+\vol (E_k)\le e^{-\frac{k}{2(n+1)}} \vol (E_0)
+\]
+This yields, that after at most $O(n \log (\frac{\vol (E_0)}{\vol (P)}))$ iterations the algorithm terminates.
+\section{Separation Oracles}\label{sec:oracles}
+The running time of the Ellipsoid Method is independent of the number of constraints. To solve the feasibility problem for a convex $P$ with the Ellipsoid Method, you only need to design a separation oracle that decides, given a point $x^*$, whether $x^*\in P$ and if not outputs $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$. Although the argument from the introduction cannot be made in this case, the method can still be used to solve LPs as is proved in \cite{consequences}. In a last part, we show, that for the Travelling Salesperson Problem, an efficient algorithm exists.
 \subsection{Separation Oracle for Travelling Salesperson Problem}\label{subsec:seporacle}
 The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit in an undirected weighted graph $G$. For $x_e \in \{0,1\}^{E(G)}$ we let $x_e$ be the incidence vector of a tour. A popular LP relaxation for this problem is
-\begin{alignat}{3}
-\min &\sum_{e \in E(G)} d(e) x_e&&\nonumber \\
-&\sum_{e \in \delta (v)} x_e &=2 & \forall v \in V(G) \label{eq:cutinequalities}\\
-&\sum_{e \in \delta(S)} x_e \ge 2 & \forall S \subseteq V\nonumber\\
-& x &\ge 0\nonumber
-\end{alignat}
-This LP can be solved efficiently using the Ellipsoid method. The inequalities \autoref{eq:cutinequalities} can be efficiently separated by calculating the minimum $s$-$t$-cut for all $s,t \in V$. 
+\begin{align}
+\min \sum_{e \in E(G)} &d(e) x_e\nonumber \\
+\sum_{e \in \delta (v)}& x_e =2 , \forall v \in V(G) \label{eq:cutinequalities}\\
+\sum_{e \in \delta(S)} &x_e \ge 2 , \forall S \subseteq V\nonumber\\
+ &x \ge 0\nonumber
+\end{align}
+This LP can be solved efficiently using the Ellipsoid method. The inequalities \autoref{eq:cutinequalities} can be efficiently separated by calculating the minimum $s$-$t$-cut for all $s,t \in V$, which yields a polynomial separation oracle.
 
 
 \printbibliography
