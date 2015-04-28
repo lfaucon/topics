@@ -22,23 +22,21 @@
 \lecture{11}{April 27, 2015}{Ola Svensson}{Louis Faucon, Andreas Haupt}
 
 \section{Introduction}
-In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{karmarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
+In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{karmarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which we have an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
 
 \subsection{Motivation}
-Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we caught it. The question to ask is
+Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we catch it. Questions arise :
 \begin{itemize}
 \item How big is Sahara?
 \item When to terminate, i.e. How small is the smallest lion?
 \end{itemize}
-The corresponding idea for the problem 
+
 \subsection{Problem Statement}
 The problem we wish to solve is the following:
 
-%:
-Feasibility Problem
-Solve: Given a bounded convex set $P\subseteq \R^n$
-Find: $x \in P$ or decide, that $P = \emptyset$.
-%:
+Given a bounded convex set $P\subseteq \R^n$, find: $x \in P$ or decide, that $P = \emptyset$.
+
+This problem seems to solve only feasibility, but since we can add the cost function as as one of the limiting inequalities the algorithm remains very useful for optimization.
 
 \section{The Ellipsoid Algorithm}
 The following routine solves the Feasibility Problem:
@@ -89,7 +87,7 @@ The result is \autoref{fig:ellipsoidexample}.
   \end{scope}
 \draw (0,0) circle (1cm);
 \draw (4,0) ellipse (2cm and 1cm);
-\path (.4,1) edge [bend left, ->] node[above]{$x \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} +  \begin{pmatrix} 4 \\ 0 \end{pmatrix}$} (3.4,1);
+\path (.4,1) edge [bend left, ->] node[above]{$x \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} x +  \begin{pmatrix} 4 \\ 0 \end{pmatrix}$} (3.4,1);
 \end{tikzpicture}
 \caption{On the left the unit ball in $\R^2$, the affine map mapping the unit circle to the ellipsoid from \protect\autoref{eq:ellipsoidexample}.}
 \label{fig:ellipsoidexample}
@@ -97,21 +95,24 @@ The result is \autoref{fig:ellipsoidexample}.
 \begin{lemma}[Half-Ball Lemma]\label{lem:halfball}
 The half-ball
 \[
-H = \{x \in \R^n | \| x \| \le 1, x \ge 0 \}
+H = \{x \in \R^n | \| x \| \le 1, x_1 \ge 0 \}
 \]
-where $x \ge 0$ means $x_i \ge 0, \forall 1 \le i \le n$ is contained in the ellipsoid
+is contained in the ellipsoid
 \[
 E = \left\{ x \in \R^n \middle| \left(\frac{n+1}{n}\right)^2\left(x_1 - \frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 \le 1 \right\}
 \]
 \end{lemma}
 \begin{proof}
-If $\sum_{i=2}^n x_i^2 \le 1, x \ge 0$, then the lemma is true. One calculates
+Let $x$ be in the half-ball, we have $\sum_{i=1}^n x_i^2 \le 1, x_1 \ge 0$, then one calculates :
 \begin{align*}
-\left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 &= \left(\frac{n+1}{n} \right)^2 \left(x_1^2-2\frac{1}{n+1}x_1 + \frac{1}{(n+1)^2}\right) + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2\\
-&= \frac{(n+1)^2}{n^2} x_1^2-\frac{2(n+1)}{n^2}x_1 + \frac{1}{n^2} + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2\\
-&=%:
+\left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 
+&\leq \left(\frac{n+1}{n} \right)^2 \left(x_1-\frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2}(1 - x_1^2)\\
+&\leq \frac{2(n+1)}{n^2} x_1^2-\frac{2(n+1)}{n^2}x_1 + 1\\
+&\leq 1 \text{ because } 0 \leq x_1 \leq 1
 \end{align*}
 \end{proof}
+
+
 We remark, that this ellipsoid is $E(a,A)$ with
 \begin{align*}
 a &= \frac{1}{n+1} e_1 &  A^{\frac{1}{2}}&= \diag \left(\frac{n}{n+1}, \frac{n}{\sqrt{n^2-1}}, \dots, \frac{n}{\sqrt{n^2-1}}\right),
@@ -131,24 +132,28 @@ where $e_1$ is the first canonical basis vector and $\diag (x_1, \dots, x_n)$ de
 \draw (1,0) arc (0:180:1cm);
 \draw (0,0.33333) ellipse (1.15 and 0.6666);
 \end{tikzpicture}
-\caption{The ellipsoid $E$ from \protect\autoref{fig:halfball}}
+\caption{The smallest ellipsoid containing the half-ball in dimension two}
 \label{fig:halfball}
 \end{figure}
-What is the volume of our ellipsoid? For sure, $a$ does not matter for the volume. The change of volume is thus given by
+What is the volume of our ellipsoid? For sure, $a$ does not matter for the volume. The change of volume is thus given by $\det (A^{\frac{1}{2}})$ and we have
 \[
-\det (A^{\frac{1}{2}}) = \frac{n}{n+1}\prod_{i=2}^n \frac{n}{\sqrt{n^2-1}} \le e^{-\frac{1}{2(n+1)}}
+\det (A^{\frac{1}{2}}) = \frac{n}{n+1} (\frac{n}{\sqrt{n^2-1}})^{n-1} \le e^{-\frac{1}{n+1}} (e^{\frac{1}{n^2-1}})^{\frac{n-1}{2}} = e^{-\frac{1}{2(n+1)}}
 \]
+
+using $e^x \geq 1 + x$.
 \begin{corollary}
-If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding ellipsoid from \autoref{lem:halfball}, then
+If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding ellipsoid from Lemma \ref{lem:halfball}, then
 \[
-\frac{\vol (E)}{\vol (E_n)} = \det (A^{\frac{1}{2}}) = \frac{n}{n+1} \left(\frac{n^2}{n^2-1}\right)^{\frac{n}{2}-\frac{1}{2}} \le e^{-\frac{1}{n+1} + \frac{n-1}{2} \frac{1}{n^2-1}} = e^{-\frac{1}{n+1} + \frac{1}{2(n+1)}} \le e^{-\frac{1}{2(n+1)}}<1
+\frac{\vol (E)}{\vol (E_n)} = \det (A^{\frac{1}{2}}) \le e^{-\frac{1}{2(n+1)}}<1
 \]
 \end{corollary}
-Now, we may consider more generally $E = (-\frac{d}{d+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$, where $I$ denotes the identity matrix. But now $E_k = (a_k, A)$ and some hyperplane goes through $a_k$.  Let us check what happens if we apply $T^{-1} (x) = (A^{-1})^{\frac{1}{2}} (x-a)$ to $E_k$:
+More generally, we may consider the half-ball in any direction $d$. Then the ellipsoid becomes $E = (-\frac{d}{n+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$, where $I$ denotes the identity matrix. Now, given $E_k = (a_k, A_k)$ and some hyperplane which goes through $a_k$, we can apply the inverse transformation $T^{-1} (x) = (A^{-1})^{\frac{1}{2}} (x-a)$ :
 \begin{itemize}
-\item It transforms $E_k$ into the unit ball. 
-\item $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | c^\transpose A^{\frac{1}{2}} y \le 0 \}$
+\item $E_k$ becomes the unit ball. 
+\item The hyperplane now cuts the unit ball in half-balls $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | (c^\transpose A^{\frac{1}{2}}) y \le 0 \}$
 \end{itemize}
+Finally applying again the transformation to the ellipsoid given by Lemma \ref{lem:halfball} gives us the desired ellipsoid.
+
 
 \section{Stopping Criterion, Minimal Size of Polytopes and choice of separation hyperplane for binary problems}
 We now discuss three remaining questions:
