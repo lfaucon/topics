@@ -10,6 +10,8 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{hyperref}
+\usepackage[style=alphabetic, backend=biber]{biblatex}
+\bibliography{refs.bib}
 
 \oddsidemargin=0.15in
 \evensidemargin=0.15in
@@ -22,7 +24,7 @@
 \lecture{11}{April 27, 2015}{Ola Svensson}{Louis Faucon, Andreas Haupt}
 
 \section{Introduction}
-In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{karmarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which we have an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
+In today's lecture, the \emph{Ellipsoid Method} is introduced, which has been the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice as experiments show. A major advantage of the Ellipsoid method is that it can solve even exponentially-sized LPs for which an efficient so-called separation oracle exists. This is the case i.e. for the Traveling Salesperson problem, as we show in \autoref{subsec:seporacle}. Another widely used solution method for LPs, the \emph{Interior Point Method} introduced by \cite{karmarkar89}, will not be covered here, as it does not have this advantage, although it is proved efficient in theory and practice, but which will not be covered here. 
 
 \subsection{Motivation}
 Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we catch it. Questions arise :
@@ -189,7 +191,7 @@ Given $x^* \in P$
 Decide whether $x^*\in P$ and if not output $a \in \R^n, b \in \R$, such that $a^\transpose x \le b, \forall x \in P$ and $a^\transpose x^* > b$.
 %
 
-\subsection{Separation Oracle for Travelling Salesperson Problem}
+\subsection{Separation Oracle for Travelling Salesperson Problem}\label{subsec:seporacle}
 The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit in an undirected weighted graph $G$. For $x_e \in \{0,1\}^{E(G)}$ we let $x_e$ be the incidence vector of a tour. A popular LP relaxation for this problem is
 \begin{alignat}{3}
 \min &\sum_{e \in E(G)} d(e) x_e&&\nonumber \\
@@ -200,8 +202,6 @@ The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit
 This LP can be solved efficiently using the Ellipsoid method. The inequalities \autoref{eq:cutinequalities} can be efficiently separated by calculating the minimum $s$-$t$-cut for all $s,t \in V$. 
 
 
-\bibliographystyle{plain}
-\bibliography{refs}
-
+\printbibliography
 
 \end{document}
