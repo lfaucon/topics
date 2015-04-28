@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\usepackage[OT4]{fontenc}
+\usepackage[OT1]{fontenc}
 \newtheorem{define}{Definition}
 \usepackage{mathtools}
 \newcommand{\R}{\mathbf{R}}
@@ -22,7 +22,7 @@
 \lecture{11}{April 27, 2015}{Ola Svensson}{Louis Faucon, Andreas Haupt}
 
 \section{Introduction}
-In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{kamarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
+In today's lecture, the \emph{Ellipsoid Method} is presented, which is the first weakly polynomial-time algorithm\footnote{An algorithm is weakly polynomial if its running time not only depends on the number of inputs, but also logarithmically on their size.} for the solution of LPs. The method was originally proposed in \cite{shor77} for solving convex optimization problems. In \cite{khachiyan79}, this technique was applied to Linear Programming. The method is fast in theory, but very slow in practice. \cite{karmarkar89} developped the Interior Point Method, which is fast in theory and practice, but which will not be covered here. The reason for us to cover the Ellipsoid method instead of Interior Point methods is that the Ellipsoid method can solve even exponentially-sized LPs for which an efficient so-called separation oracle, which is the case i.e. for the Traveling Salesperson problem. 
 
 \subsection{Motivation}
 Following \cite{lovaszschrijver}, we consider the problem of catching a lion in Sahara with the assumption, that there is at most one lion. This can be done by building a fence around Sahara, and iteratively halving Sahara or already halved parts of it by a fence and find out anyhow, on which side of this halving fence the lion is. When the area is smaller than the smallest lion, we caught it. The question to ask is
@@ -73,28 +73,35 @@ E(a,A) \coloneqq \{x \in \R^n | (x-a)^{\transpose} A^{-1} (x-a) \le 1 \} = \{x \
 \end{definition}
 In fact, $E(a,A)$ is just the image of the unit ball $\{x\in \R^n | \|x\|\le 1\}$ under the affine-linear map $x \mapsto A^{\frac{1}{2}} x + a$. As an example, consider $E(a,A)$ with 
 \begin{align}
-A^{\frac{1}{2}} &= \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} & a &= \begin{pmatrix} 4 \\ 0 \end{pmatrix}. \label{eq:ellipsoidexample}
+A^{\frac{1}{2}} &= \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} & a &= \begin{pmatrix} 4 \\ 0 \end{pmatrix}. \label{eq:ellipsoidexample}
 \end{align}
 The result is \autoref{fig:ellipsoidexample}.
 \begin{figure}
 \centering
 \begin{tikzpicture}[scale=2]
-\begin{scope}    \draw[->] (-1.1,0) -- (6.1,0) node[right] {$x$} coordinate(x axis);    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);    \foreach \x/\xtext in {-1,0,...,6}      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};  \end{scope}
+\begin{scope}
+    \draw[->] (-1.1,0) -- (6.1,0) node[right] {$x$} coordinate(x axis);
+    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);
+    \foreach \x/\xtext in {-1,0,...,6}
+      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};
+    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}
+      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};
+  \end{scope}
 \draw (0,0) circle (1cm);
 \draw (4,0) ellipse (2cm and 1cm);
-\path (.4,1) edge [bend left, ->] node[above]{$x \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} +  \begin{pmatrix} 4 \\ 0 \end{pmatrix}$} (3.4,1);
+\path (.4,1) edge [bend left, ->] node[above]{$x \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} +  \begin{pmatrix} 4 \\ 0 \end{pmatrix}$} (3.4,1);
 \end{tikzpicture}
 \caption{On the left the unit ball in $\R^2$, the affine map mapping the unit circle to the ellipsoid from \protect\autoref{eq:ellipsoidexample}.}
 \label{fig:ellipsoidexample}
 \end{figure}
 \begin{lemma}[Half-Ball Lemma]\label{lem:halfball}
-The half-ball 
+The half-ball
 \[
-H = \{x \in \R^n | \| x \| \le 1, x \ge 0 \}
+H = \{x \in \R^n | \| x \| \le 1, x \ge 0 \}
 \]
-where $x \ge 0$ means $x_i \ge 0, \forall 1 \le i \le n$ is contained in the ellipsoid
+where $x \ge 0$ means $x_i \ge 0, \forall 1 \le i \le n$ is contained in the ellipsoid
 \[
-E = \left\{ x \in \R^n \middle| \left(\frac{n+1}{n}\right)^2\left(x_1 - \frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 \le 1 \right\}
+E = \left\{ x \in \R^n \middle| \left(\frac{n+1}{n}\right)^2\left(x_1 - \frac{1}{n+1}\right)^2 + \frac{n^2-1}{n^2} \sum_{i=2}^n x_i^2 \le 1 \right\}
 \]
 \end{lemma}
 \begin{proof}
@@ -113,7 +120,14 @@ where $e_1$ is the first canonical basis vector and $\diag (x_1, \dots, x_n)$ de
 \begin{figure}
 \centering
 \begin{tikzpicture}[scale=2]
-\begin{scope}    \draw[->] (-1.6,0) -- (1.6,0) node[right] {$x$} coordinate(x axis);    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);    \foreach \x/\xtext in {-1,0,...,1}      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};  \end{scope}
+\begin{scope}
+    \draw[->] (-1.6,0) -- (1.6,0) node[right] {$x$} coordinate(x axis);
+    \draw[->] (0,-1.1) -- (0,1.1) node[above] {$y$} coordinate(y axis);
+    \foreach \x/\xtext in {-1,0,...,1}
+      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white] {$\xtext$};
+    \foreach \y/\ytext in {-1, -.5/-\frac{1}{2}, .5/\frac{1}{2}, 1}
+      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};
+  \end{scope}
 \draw (1,0) arc (0:180:1cm);
 \draw (0,0.33333) ellipse (1.15 and 0.6666);
 \end{tikzpicture}
@@ -133,7 +147,7 @@ If $E_n$ denotes the unit ball in $n$ dimensions, and $E$ the corresponding elli
 Now, we may consider more generally $E = (-\frac{d}{d+1}, F)$, where $F = \frac{n^2}{n^2-1} (I - \frac{2}{n+1} dd^\transpose)$, where $I$ denotes the identity matrix. But now $E_k = (a_k, A)$ and some hyperplane goes through $a_k$.  Let us check what happens if we apply $T^{-1} (x) = (A^{-1})^{\frac{1}{2}} (x-a)$ to $E_k$:
 \begin{itemize}
 \item It transforms $E_k$ into the unit ball. 
-\item $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | c^\transpose A^{\frac{1}{2}} y \le 0 \}$
+\item $\{x\in \R^n | c^\transpose x \le c^\transpose a_k \} \xmapsto{T^{-1}} \{y\in \R^n | c^\transpose (A^{\frac{1}{2}} y + a_k ) \le c^\transpose a_k\} = \{y \in \R^n | c^\transpose A^{\frac{1}{2}} y \le 0 \}$
 \end{itemize}
 
 \section{Stopping Criterion, Minimal Size of Polytopes and choice of separation hyperplane for binary problems}
@@ -179,4 +193,10 @@ The Travelling Salesperson Problem asks for a minimum length Hamiltonian circuit
 & x &\ge 0\nonumber
 \end{alignat}
 This LP can be solved efficiently using the Ellipsoid method. The inequalities \autoref{eq:cutinequalities} can be efficiently separated by calculating the minimum $s$-$t$-cut for all $s,t \in V$. 
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+
 \end{document}
