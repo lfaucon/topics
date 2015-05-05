@@ -17,6 +17,21 @@ Homework IV
 \section{Perfect Matchings}
 \begin{enumerate}
 \item
+It suffices to give a feasible point in the perfect matching polytope of this graph. A theorem by Edmonds proved in class shows, that this polytope is characterized by the inequalities
+\begin{align*}
+x_e &\ge 0 , \quad \forall e \in E (G) \\
+x(\delta (v)) &=1, \quad \forall v \in V(G) \\
+x (\delta (S)) &\ge 1, \quad \forall S \subset \binom{V}{k}, k \in 2\mathbb{Z}+1
+\end{align*}
+We claim, that the point $x$, $x_e = \frac{1}{3}, \forall e \in E(G)$ is feasible. The first $\lvert E(G)\rvert$ inequalities are obviously satisfied, the following $\lvert V(G)\rvert$ by $3$-regularity. For the third consider an odd subset of vertices $S$ of size at least $3$. Clearly, it suffices to show, that $\lvert \delta (S) \rvert \ge 3$. We know
+\begin{align*}
+\lvert\delta (S)\rvert &\ge 2
+\end{align*}
+by $2$-connectedness, so it suffices to show, that $\lvert \delta (S) \rvert$ is odd. By a double-counting argument, we have
+\begin{align*}
+\lvert \delta (S) \rvert + 2\lvert E(G[S])\rvert = 3 \lvert S \rvert
+\end{align*}
+where the right hand side is odd and the second summand on the left side is even. This shows that $\lvert \delta (S) \rvert$ is odd and completes the proof.
 \item
 \item
 \end{enumerate}
