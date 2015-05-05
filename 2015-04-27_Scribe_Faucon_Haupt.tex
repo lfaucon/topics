@@ -37,7 +37,7 @@ Now we make the transfer to the problem we intend to solve:
 \subsection{Problem Statement}
 We would like to find, given a convex set $P\subseteq \R^n$, an $x \in P$ or decide, that $P = \emptyset$.
 
-If we can solve this problem efficiently, we can also solve an arbitrary LP efficiently, using the following: We consider the primal-dual polytope, i.e. the LP that contains all the inequalities and equalities of the dual and the primal LP and the equality of values. This means for the LP $\max_{Ax\le b} c^\transpose x$ the polytope
+If we can solve this problem efficiently, we can also solve an arbitrary LP efficiently, using the following: We consider the primal-dual polytope, i.e. the LP that contains all the inequalities and equalities of the dual and the primal LP and the equality of values of the objective. This means for the LP $\max_{Ax\le b} c^\transpose x$ the polytope
 \[
 \{x \in \R^n |Ax \le b, yA=c, y \ge 0, yb=cx\}.
 \]
@@ -132,6 +132,7 @@ Let $x$ be in the half-ball, we have $\sum_{i=1}^n x_i^2 \le 1, x_1 \ge 0$, then
 \end{align*}
 as  $0 \leq x_1 \leq 1$
 \end{proof}
+
 We remark, that this ellipsoid is $E(a,A)$ with
 \begin{align*}
 a &= \frac{1}{n+1} e_1 &  A^{\frac{1}{2}}&= \diag \left(\frac{n}{n+1}, \frac{n}{\sqrt{n^2-1}}, \dots, \frac{n}{\sqrt{n^2-1}}\right),
