@@ -47,13 +47,13 @@ and edge set
 \begin{multline*}
 E=E(G) \setminus \{\{v,v^1\},\{v,v^2\},\{w,w^1\},\{w,w^2\}\}\\ \cup \{\{v_1,v^1\},\{v_2,v^2\},\{w_1,w^1\},\{w_2,w^2\},\{v_1,v_2\},\{w_1,w_2\}\}.
 \end{multline*}
-This graph then is $3$-regular and $2$-connected as one easily verifies. By the second part of the task, if we delete edges $\{v_1,v^1\}$ and $\{w_1,w^1\}$, we can find a perfect matching in the graph. This perfect matching has to contain either the edges $\{v_1,w_1\}$ and $\{v_2,w_2\}$ or $\{v_1, v_2\}$ and $\{w_1, w_2\}$. But in both cases, we then get a perfect matching for the original graph by taking the perfect matching in this graph with the exception, that we contract $\{v_1, v_2\}$ and $\{w_1, w_2\}$ calling the vertices resulting from this contraction $v$ resp. $w$ and including the edge $\{v,w\}$. 
+This graph then is $3$-regular and $2$-connected as one easily verifies. By the second part of the task, if we delete edges $\{v_1,v^1\}$ and $\{w_2,w^2\}$, we can find a perfect matching in the graph. This perfect matching has to contain either the edges $\{v_1,w_1\}$ and $\{v_2,w_2\}$ or $\{v_1, v_2\}$ and $\{w_1, w_2\}$. But in both cases, we then get a perfect matching for the original graph by taking the perfect matching in this graph with the exception, that we contract $\{v_1, v_2\}$ and $\{w_1, w_2\}$ calling the vertices resulting from this contraction $v$ resp. $w$ and then including the edge $\{v,w\}$. 
 \end{enumerate}
 
 \section{Ellipsoid Method}
 \begin{enumerate}
 \item
-At first, we can decide whether a semidefinite problem is feasible efficiently: We first verify the $m$ inequalities ($O(n^2m)$). We can compute the eigenvalues of the 
+At first, we can decide whether a semidefinite problem is feasible efficiently: We first verify the $m$ inequalities ($O(n^2m)$). We can compute the eigenvalues of the matrix i.e. by Cholesky factorization. This also gives 
 
 Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ (M-A) x = 0\}$. 
 
