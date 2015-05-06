@@ -111,7 +111,7 @@ This graph then is $3$-regular and $2$-connected as one easily verifies (See bel
 \item
 At first, we can decide whether a semidefinite problem is feasible efficiently: We first verify the $m$ inequalities ($O(n^2m)$). We can compute the eigenvalues of the matrix i.e. by Cholesky factorization. This also gives 
 
-Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ (M-A) x = 0\}$. 
+Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ x^T (M-A) x = 0\}$.
 
 \item
 
