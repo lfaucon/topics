@@ -33,13 +33,29 @@ by $2$-connectedness, so it suffices to show, that $\lvert \delta (S) \rvert$ is
 \end{align*}
 where the right hand side is odd and the second summand on the left side is even. This shows that $\lvert \delta (S) \rvert$ is odd and completes the proof.
 \item
+We assign now weights to the edges of graph $G$. We give $f,g$ weight $2$ and the rest weight $1$. Then our (still feasible) solution from the first part has weight
+\[
+\frac{\lvert V\rvert}{2} + \frac{2}{3}
+\]
+Now by the integrality of the perfect matching polytope, there is a strictly lighter integral solution. As this one has to have integral weight, it has to be of weight at most $\frac{\lvert V \rvert}{2}$, which means, that there is a perfect matching containing neither $f$ nor $g$.
 \item
+Consider such a graph. Let $e=\{v,w\}$ be the unique bridge where $v$ has neighbors $v^1$ and $v^2$ and . Now consider a new graph that has as edge set 
+\[
+V = V(G) \setminus \{v,w\}\cup \{v_1, w_1, v_2, v_2\}
+\]
+and edge set 
+\begin{multline*}
+E=E(G) \setminus \{\{v,v^1\},\{v,v^2\},\{w,w^1\},\{w,w^2\}\}\\ \cup \{\{v_1,v^1\},\{v_2,v^2\},\{w_1,w^1\},\{w_2,w^2\},\{v_1,v_2\},\{w_1,w_2\}\}.
+\end{multline*}
+This graph then is $3$-regular and $2$-connected as one easily verifies. By the second part of the task, if we delete edges $\{v_1,v^1\}$ and $\{w_1,w^1\}$, we can find a perfect matching in the graph. This perfect matching has to contain either the edges $\{v_1,w_1\}$ and $\{v_2,w_2\}$ or $\{v_1, v_2\}$ and $\{w_1, w_2\}$. But in both cases, we then get a perfect matching for the original graph by taking the perfect matching in this graph with the exception, that we contract $\{v_1, v_2\}$ and $\{w_1, w_2\}$ calling the vertices resulting from this contraction $v$ resp. $w$ and including the edge $\{v,w\}$. 
 \end{enumerate}
 
 \section{Ellipsoid Method}
 \begin{enumerate}
 \item
-We first verify the $l$ inequalities. Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ (M-A) x = 0\}$. 
+At first, we can decide whether a semidefinite problem is feasible efficiently: We first verify the $m$ inequalities ($O(n^2m)$). We can compute the eigenvalues of the 
+
+Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ (M-A) x = 0\}$. 
 
 \item
 
