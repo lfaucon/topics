@@ -109,9 +109,27 @@ This graph then is $3$-regular and $2$-connected as one easily verifies (See bel
 \section{Ellipsoid Method}
 \begin{enumerate}
 \item
-At first, we can decide whether a semidefinite problem is feasible efficiently: We first verify the $m$ inequalities ($O(n^2m)$). We can compute the eigenvalues of the matrix i.e. by Cholesky factorization. This also gives 
+An efficient separation oracle for the matrix $A$ can be :
+\begin{itemize}
+\item First verify the $m$ inequalities in $O(n^2m)$ time. And directly return it as the separating hyperplane if one is not verified.
 
-Then, if it exists, we can find $x$ s.t. $x^T M x < 0$ in polynomial time by diagonalising. Then a separator hyperplane will be $H = \{A\ |\ x^T (M-A) x = 0\}$.
+\item Then compute the eigenvectors of the symmetric matrix $A + A^T$ in polynomial time using Cholesky factorization. If one of the eigenvectors, $x$, has a negative eigenvalue, a separator hyperplane is $H = \{M\ |\ x^T (M-A) x = 0\}$.
+\end{itemize}
+
+Indeed, the second point works because
+\[
+\forall x, x^T A x = (x^T A x)^T = x^T A^T x
+\]
+
+which implies
+\[
+A \ \text{semidefinite} \iff (A + A^T)\ \text{semidefinite}
+\]
+
+and
+\[
+\forall x, x^T (A + A^T) x < 0 \iff x^T A x < 0
+\]
 
 \item
 
