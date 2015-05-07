@@ -132,6 +132,19 @@ and
 \]
 
 \item
+First of all, the the set of semidefinite matrices is convex and full-dimensional which are good news when we want to apply the Ellipsoid method.
+
+With this efficient separation oracle, we also want an initial ellipsoid $E_0$ and a minimal polytope $P$ such that $log(vol(E_0)/vol(P))$ 
+is polynomial because the volume of the ellipsoid decreases exponentially fast :
+\[
+vol(E_k)\le e^{-\frac{k}{2(n+1)}} vol(E_0)
+\]
+
+For the initial ellipsoid we can consider the same solution than for simple LP considering that the polytope is bounded and full dimensional with rational parameters. The size of the ellipsoid will then be polynomial in the parameters. 
+
+We cannot rely on the LP solution for the minimal polytope stopping criterion because the intersection with the cone of semidefinite matrices can reduce the volume of the polytope. A solution is to only try to find an $\epsilon$-approximation of the feasibility problem. Which means we would either give a point of the polytope or conclude it is smaller than a ball of volume $\epsilon$. This phase will require $O(-log(\epsilon))$ time.
+
+
 
 
 \end{enumerate}
