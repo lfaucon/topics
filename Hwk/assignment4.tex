@@ -37,7 +37,7 @@ We assign now weights to the edges of graph $G$. We give $f,g$ weight $2$ and th
 \frac{\lvert V\rvert}{2} + \frac{2}{3}
 \]
 Now by the integrality of the perfect matching polytope, there is a strictly lighter integral solution. As this one has to have integral weight, it has to be of weight at most $\frac{\lvert V \rvert}{2}$, which means, that there is a perfect matching containing neither $f$ nor $g$.
-\item \label{enum:bridge}
+\item \label{enum:bridge}
 Consider such a graph. Let $e=\{v,w\}$ be the unique bridge where $v$ has neighbors $v^1$ and $v^2$ and $w$ has neighbors $w^1$ and $w^2$. Now consider a new graph that has as vertex set
 \[
 V = (V(G) \setminus \{v,w\})\cup \{v_1, w_1, v_2, w_2\}
@@ -46,7 +46,7 @@ and edge set
 \begin{multline*}
 E = (E(G) \setminus \{\{v,v^1\},\{v,v^2\},\{w,w^1\},\{w,w^2\}\})\\ \cup \{\{v_1,v^1\},\{v_2,v^2\},\{w_1,w^1\},\{w_2,w^2\},\{v_1,v_2\},\{v_1,w_1\},\{v_2,w_2\},\{w_1,w_2\}\}.
 \end{multline*}
-This graph then is $3$-regular and $2$-connected as one easily verifies (See \autoref{fig:construction}). By the second part of the task, if we delete edges $\{v_1,v^1\}$ and $\{w_2,w^2\}$, we can find a perfect matching in the graph. This perfect matching has to contain either the edges $\{v_1,w_1\}$ and $\{v_2,w_2\}$ or $\{v_1, v_2\}$ and $\{w_1, w_2\}$. But in both cases, we then get a perfect matching for the original graph by taking the perfect matching in this graph with the exception, that we contract $\{v_1, v_2\}$ and $\{w_1, w_2\}$ calling the vertices resulting from this contraction $v$ resp. $w$ and then including the edge $\{v,w\}$. 
+This graph then is $3$-regular and $2$-connected as one easily verifies (See Figure \ref{fig:bridge}). By the second part of the task, if we delete edges $\{v_1,v^1\}$ and $\{w_2,w^2\}$, we can find a perfect matching in the graph. This perfect matching has to contain either the edges $\{v_1,w_1\}$ and $\{v_2,w_2\}$ or $\{v_1, v_2\}$ and $\{w_1, w_2\}$. But in both cases, we then get a perfect matching for the original graph by taking the perfect matching in this graph with the exception, that we contract $\{v_1, v_2\}$ and $\{w_1, w_2\}$ calling the vertices resulting from this contraction $v$ resp. $w$ and then including the edge $\{v,w\}$. 
 
 \begin{figure}
 \begin{subfigure}[c]{.5\linewidth}
@@ -93,7 +93,8 @@ This graph then is $3$-regular and $2$-connected as one easily verifies (See \au
 \end{tikzpicture}
 \caption{Dashed will be deleted.}
 \end{subfigure}
-\caption{Construction made in Task \ref{sec:perfectmatch} \ref{enum:bridge}.}
+\caption{Construction made in Task \ref{enum:bridge}.}
+\label{fig:bridge}
 \end{figure}
 
 \end{enumerate}
@@ -105,7 +106,7 @@ An efficient separation oracle for the matrix $A$ is the following:
 \begin{itemize}
 \item First verify the $m$ inequalities in $O(n^2m)$ time. If it turns out that one of the inequalities is not satisfied, this inequality defines a separating hyperplane that may be returned.
 
-\item Then compute the eigenvectors of the symmetric matrix $A + A^T$ in polynomial time\footnote{This might be done by computing eigenvalues and corresponding eigenvectors of this symmetric matrix using the QR algorithm}. If one of the eigenvectors, $x$, has a negative eigenvalue, a separator hyperplane is $H = \{M\ |\ x^T (M-A) x = 0\}$.
+\item Then compute the eigenvectors of the symmetric matrix $A + A^T$ in polynomial time\footnote{This might be done by computing eigenvalues and corresponding eigenvectors of this symmetric matrix using the Jacobi eigenvalue algorithm}. If one of the eigenvectors, $x$, has a negative eigenvalue, a separator hyperplane is $H = \{M\ |\ x^T (M-A) x = 0\}$.
 \end{itemize}
 
 Indeed, the second point works because
@@ -124,13 +125,13 @@ and
 \]
 
 \item
-First of all, the the set of semidefinite matrices is convex and full-dimensional which are good news when we want to apply the Ellipsoid method.
+First of all, the set of semidefinite matrices is convex and full-dimensional which are good news when we want to apply the Ellipsoid method.
 
-With this efficient separation oracle, we only need for any semidefinite programming polytope
+With this efficient separation oracle, we only need for any semidefinite programming polytope $P$
 \begin{itemize}
 \item an ellipsoid $E_0(P) \supseteq P$
 \item a lower bound $B$ on $\vol (K)$ for any full-dimensional semidefinite programming polytope
-\item that these two satisfy  $\log(\frac{\vol(E_0(P)}{B})$ polynomial in the input size of $P$
+\item that these two satisfy  $\log(\frac{\vol(E_0(P))}{B})$ polynomial in the input size of $P$
 \end{itemize} 
 This suffices, as an exponential decrease in volume of the ellipsoids was shown in the lecture:
 \[
@@ -141,8 +142,6 @@ Unfortunately, these two technicalities are not so easily resolved:
 \item We cannot use an initial ellipsoid existent for LP, because even though such an initial ellipsoid may be taken if the LP obtained when deleting the semi-definiteness assumption is bounded, but it is not clear to us, why this should always be the case
 \item We cannot rely on the LP solution for the minimal polytope stopping criterion because the intersection with the cone of semidefinite matrices can reduce the volume of the polytope. A solution would be only to find an $\epsilon$-approximation of the feasibility problem. Which means we would either give a point of the polytope or conclude it is smaller than a ball of volume $\epsilon$. This phase will require $O(-\log(\epsilon))$ time.
 \end{itemize}
-
-
 
 \end{enumerate}
 
